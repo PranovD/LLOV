@@ -35,7 +35,7 @@ db = firebase.database()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('main.html', page="Main")
 
 @app.route('/login')
 def login():
