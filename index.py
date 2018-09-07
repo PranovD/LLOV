@@ -33,42 +33,51 @@ auth = firebase.auth()
 user = auth.sign_in_with_email_and_password("tester@llov.com", "tester")
 db = firebase.database()
 
+
+
 @app.route('/')
 def index():
     return render_template('main.html', page="Main")
+
 
 @app.route('/login')
 def login():
     return render_template('login.html')
 
+
 @app.route('/dogs')
 def dogs():
     dogData = db.child("fosterdogs").get()
     print(dogData.val()) # {"Morty": {"name": "Mortimer 'Morty' Smith"}, "Rick": {"name": "Rick Sanchez"}}
-    return render_template('fosterdogs.html', data=dogData)
+    return render_template('fosterdogs.html', data=dogData, page="Foster Dogs")
+
 
 @app.route('/fosters')
 def fosters():
     fosterData = db.child("fosters").get()
     print(fosterData.val()) 
-    return render_template('fosters.html', data=fosterData)
+    return render_template('fosters.html', data=fosterData, page="Foster Volunteers")
+
+
+@app.route('/donations')
+def donationsPage():
+    return render_template('donations.html', page="Donations")
 
 
 @app.route('/forms', methods=['GET'])
 def formsPage():
     pass
 
+
 @app.route('/data')
 def dataPage():
     return json.jsonify(db.get().val())
 
-@app.route('/donations')
-def donationsPage():
-    pass
 
 @app.route('/onAppLoad')
 def onAppLoad():
     pass
+
 
 if __name__ == '__main__':
     app.run(host='localhost')
