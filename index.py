@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, json
 import os
 import pymongo
 import pyrebase
@@ -41,6 +41,18 @@ def index():
 def login():
     return render_template('login.html')
 
+@app.route('/dogs')
+def dogs():
+    dogData = db.child("fosterdogs").get()
+    print(dogData.val()) # {"Morty": {"name": "Mortimer 'Morty' Smith"}, "Rick": {"name": "Rick Sanchez"}}
+    return render_template('fosterdogs.html', data=dogData)
+
+@app.route('/fosters')
+def fosters():
+    fosterData = db.child("fosters").get()
+    print(fosterData.val()) 
+    return render_template('fosters.html', data=fosterData)
+
 
 @app.route('/forms', methods=['GET'])
 def formsPage():
@@ -48,7 +60,7 @@ def formsPage():
 
 @app.route('/data')
 def dataPage():
-    return jsonify(db.get().val())
+    return json.jsonify(db.get().val())
 
 @app.route('/donations')
 def donationsPage():
@@ -60,6 +72,7 @@ def onAppLoad():
 
 if __name__ == '__main__':
     app.run(host='localhost')
+
 
 
 
