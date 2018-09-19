@@ -51,11 +51,15 @@ def dogs():
     print(dogData.val()) # {"Morty": {"name": "Mortimer 'Morty' Smith"}, "Rick": {"name": "Rick Sanchez"}}
     return render_template('fosterdogs.html', data=dogData, page="Foster Dogs")
 
+@app.route('/volunteers')
+def volunteers():
+    return render_template('volunteers.html', page="Volunteers")
+
 
 @app.route('/fosters')
 def fosters():
     fosterData = db.child("fosters").get()
-    print(fosterData.val()) 
+    print(fosterData.val())
     return render_template('fosters.html', data=fosterData, page="Foster Volunteers")
 
 
@@ -81,8 +85,3 @@ def onAppLoad():
 
 if __name__ == '__main__':
     app.run(host='localhost')
-
-
-
-
-
