@@ -1,0 +1,17 @@
+.mainDiv {
+    margin: 0px 300px;
+}
+
+
+@media (max-width: 1200px) {
+    .mainDiv {
+        margin: 0px 100px;
+    }
+}
+
+
+@media (max-width: 700px) {
+    .mainDiv {
+        margin: 0px 50px;
+    }
+}
