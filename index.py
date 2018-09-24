@@ -48,7 +48,7 @@ def login():
 @app.route('/dogs')
 def dogs():
     dogData = db.child("fosterdogs").get()
-    print(dogData.val()) # {"Morty": {"name": "Mortimer 'Morty' Smith"}, "Rick": {"name": "Rick Sanchez"}}
+    print(dogData.val()) # {"Morti": {"name": "Mortimer 'Morty' Smith"}, "Rick": {"name": "Rick Sanchez"}}
     return render_template('fosterdogs.html', data=dogData, page="Foster Dogs")
 
 @app.route('/volunteers', methods = ['POST', 'GET'])
