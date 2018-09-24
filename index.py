@@ -58,9 +58,15 @@ def volunteers():
 
 @app.route('/fosters')
 def fosters():
-    fosterData = db.child("fosters").get()
-    print(fosterData.val())
-    return render_template('fosters.html', data=fosterData, page="Foster Volunteers")
+    pyreObj = db.child("fosters").get().val()
+    data=[]
+    for x, (key, value) in enumerate(pyreObj.items()):
+      data.append(value)
+
+    # print(fosterData.val())
+    # print(type(fosterData))
+    # print(type(fosterData.val()))
+    return render_template('fosters.html', data=data, pyreObj=pyreObj, page="Foster Volunteers")
 
 
 @app.route('/donations')
