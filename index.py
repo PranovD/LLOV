@@ -51,8 +51,11 @@ def dogs():
     print(dogData.val()) # {"Morty": {"name": "Mortimer 'Morty' Smith"}, "Rick": {"name": "Rick Sanchez"}}
     return render_template('fosterdogs.html', data=dogData, page="Foster Dogs")
 
-@app.route('/volunteers')
+@app.route('/volunteers', methods = ['POST', 'GET'])
 def volunteers():
+    if request.method == 'POST':
+        print(request.form.get('firstName'))
+
     return render_template('volunteers.html', page="Volunteers")
 
 

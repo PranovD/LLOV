@@ -2,11 +2,11 @@
 
 {% block content %}
 
-<form>
+<form action = "/volunteers" method = "POST">
 	<div class="form-group row">
 		<label for="name" class="col-sm-2 col-form-label">Name</label>
 	    <div class="col-sm-10">
-	    	<input class="form-control" placeholder="First and Last Name" id="name">
+	    	<input class="form-control" placeholder="First and Last Name" name="firstName" id="name">
 	    </div>
 	</div>
 	<div class="form-group row">
@@ -82,29 +82,100 @@
       		<input type="email" class="form-control" id="phone" placeholder="Number">
     	</div>
   	</div>
-
 	<div class="form-group row">
-		<label for="email" class="col-sm-2 col-form-label"></label>
+		<label for="email" class="col-sm-2 col-form-label">I'm interested in ...</label>
 		<div class="col-sm-10">
 	    	<div class="form-check">
-	        	<input class="form-check-input" type="checkbox" id="volunteerFormSigned">
-				<label class="form-check-label" for="gridCheck1">Volunteer Waiver Signed?</label>
-	      </div>
+	        	<input class="form-check-input" type="checkbox" id="volunteering">
+				<label class="form-check-label" for="gridCheck1">Volunteering</label>
+	    	</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="fostering">
+				<label class="form-check-label" for="gridCheck1">Fostering</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="adopting">
+				<label class="form-check-label" for="gridCheck1">Adopting</label>
+			</div>
+	    </div>
+
+    </div>
+	<div class="form-group row">
+		<label for="email" class="col-sm-2 col-form-label">I'm interested in volunteering in the following ways:</label>
+		<div class="col-sm-10">
+	    	<div class="form-check">
+	        	<input class="form-check-input" type="checkbox" id="long-term-foster">
+				<label class="form-check-label" for="gridCheck1">Long-term foster</label>
+	    	</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="short-term-foster">
+				<label class="form-check-label" for="gridCheck1">Short-term foster</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="emergency-foster">
+				<label class="form-check-label" for="gridCheck1">Emergency foster (1-2 days)</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="coordinating">
+				<label class="form-check-label" for="gridCheck1">Coordinating</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="putting-up-flyers">
+				<label class="form-check-label" for="gridCheck1">Putting up flyers</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="dog-walking">
+				<label class="form-check-label" for="gridCheck1">Dog walking</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="fundraisers">
+				<label class="form-check-label" for="gridCheck1">Fundraisers</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="helping-at-adoptions">
+				<label class="form-check-label" for="gridCheck1">Helping at Adoptions</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="transporting">
+				<label class="form-check-label" for="gridCheck1">Transporting</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="vet-appointments">
+				<label class="form-check-label" for="gridCheck1">Vet appointments</label>
+			</div>
+			<input class="form-control" placeholder="Other..." id="volunteering-other">
 	    </div>
     </div>
 
 	<div class="form-group row">
-		<label for="email" class="col-sm-2 col-form-label"></label>
+		<label for="email" class="col-sm-2 col-form-label">I'm interested in fostering/adopting a dog that is:</label>
 		<div class="col-sm-10">
 	    	<div class="form-check">
-	        	<input class="form-check-input" type="checkbox" id="gdaFormsSigned">
-				<label class="form-check-label" for="gridCheck1">GDA Forms (Foster Families Only)</label>
-	      </div>
+	        	<input class="form-check-input" type="checkbox" id="female">
+				<label class="form-check-label" for="gridCheck1">Female</label>
+	    	</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="male">
+				<label class="form-check-label" for="gridCheck1">Male</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="small">
+				<label class="form-check-label" for="gridCheck1">Small (less than 30 lbs)</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="large">
+				<label class="form-check-label" for="gridCheck1">Large (50 lbs and up)</label>
+			</div>
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" id="age">
+				<label class="form-check-label" for="gridCheck1">Age</label>
+			</div>
+			<input class="form-control" placeholder="Only these breeds..." id="breeds">
+			<input class="form-control" placeholder="Other specifications..." id="fostering-other">
 	    </div>
     </div>
 
-	<button type="button" class="btn btn-primary btn-lg btn-block">Block level button</button>
-
+	<button type="submit" class="btn btn-primary btn-lg btn-block">Submit Form</button>
 </form>
 
 {% endblock %}
