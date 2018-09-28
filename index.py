@@ -100,9 +100,25 @@ def fosters():
     return render_template('fosters.html', data=data, pyreObj=pyreObj, page="Foster Volunteers")
 
 
-@app.route('/donations')
+@app.route('/donations', methods = ['POST', 'GET'])
 def donationsPage():
-    return render_template('donations.html', page="Donations")
+    if request.method == 'POST':
+        name = request.form.get('donorName')
+        amount = request.form.get('amount')
+        source = request.form.get('source')
+        comments = request.form.get('comments')
+
+        data = {
+            'Name': name,
+            'amount': amount,
+            'comments': comments,
+            'source': source,
+            'timestamp': str(datetime.datetime.now())
+        }
+        db.child("donation").push(data)
+
+    donationData = db.child("donation").get()
+    return render_template('donations.html', data=donationData, page="Donations")
 
 
 @app.route('/forms', methods=['GET'])
