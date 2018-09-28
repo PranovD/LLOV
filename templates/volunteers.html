@@ -6,20 +6,20 @@
 	<div class="form-group row">
 		<label for="name" class="col-sm-2 col-form-label">Name</label>
 	    <div class="col-sm-10">
-	    	<input class="form-control" placeholder="First and Last Name" name="firstName" id="name">
+	    	<input class="form-control" placeholder="First and Last Name" name="fullName">
 	    </div>
 	</div>
 	<div class="form-group row">
     	<label for="email" class="col-sm-2 col-form-label">Email</label>
     	<div class="col-sm-10">
-      		<input type="email" class="form-control" id="email" placeholder="Email">
+      		<input type="email" class="form-control" name="email" placeholder="Email">
     	</div>
   	</div>
 	<div class="form-group row">
 		<label for="example-text-input" class="col-sm-2 col-form-label">Address</label>
 	    <div class="col-sm-10">
-			<input class="form-control" placeholder="Street Address" id="street">
-			<input class="form-control" placeholder="City" id="city">
+			<input class="form-control" placeholder="Street Address" name="street">
+			<input class="form-control" placeholder="City" name="city">
 			<select class="form-control" id="exampleSelect1">
 				<option value="GA">Georgia</option>
 				<option value="AL">Alabama</option>
@@ -73,28 +73,28 @@
 				<option value="WI">Wisconsin</option>
 				<option value="WY">Wyoming</option>
 			</select>
-			<input class="form-control" placeholder="Zip Code" id="zipcode">
+			<input class="form-control" placeholder="Zip Code" name="zipcode">
 	    </div>
 	</div>
 	<div class="form-group row">
     	<label for="email" class="col-sm-2 col-form-label">Phone</label>
     	<div class="col-sm-10">
-      		<input type="email" class="form-control" id="phone" placeholder="Number">
+      		<input type="email" class="form-control" name="phone" placeholder="Number">
     	</div>
   	</div>
 	<div class="form-group row">
 		<label for="email" class="col-sm-2 col-form-label">I'm interested in ...</label>
 		<div class="col-sm-10">
 	    	<div class="form-check">
-	        	<input class="form-check-input" type="checkbox" id="volunteering">
+	        	<input class="form-check-input" type="checkbox" name="volunteering">
 				<label class="form-check-label" for="gridCheck1">Volunteering</label>
 	    	</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="fostering">
+				<input class="form-check-input" type="checkbox" name="fostering">
 				<label class="form-check-label" for="gridCheck1">Fostering</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="adopting">
+				<input class="form-check-input" type="checkbox" name="adopting">
 				<label class="form-check-label" for="gridCheck1">Adopting</label>
 			</div>
 	    </div>
@@ -104,46 +104,46 @@
 		<label for="email" class="col-sm-2 col-form-label">I'm interested in volunteering in the following ways:</label>
 		<div class="col-sm-10">
 	    	<div class="form-check">
-	        	<input class="form-check-input" type="checkbox" id="long-term-foster">
+	        	<input class="form-check-input" type="checkbox" name="long-term-foster">
 				<label class="form-check-label" for="gridCheck1">Long-term foster</label>
 	    	</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="short-term-foster">
+				<input class="form-check-input" type="checkbox" name="short-term-foster">
 				<label class="form-check-label" for="gridCheck1">Short-term foster</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="emergency-foster">
+				<input class="form-check-input" type="checkbox" name="emergency-foster">
 				<label class="form-check-label" for="gridCheck1">Emergency foster (1-2 days)</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="coordinating">
+				<input class="form-check-input" type="checkbox" name="coordinating">
 				<label class="form-check-label" for="gridCheck1">Coordinating</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="putting-up-flyers">
+				<input class="form-check-input" type="checkbox" name="putting-up-flyers">
 				<label class="form-check-label" for="gridCheck1">Putting up flyers</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="dog-walking">
+				<input class="form-check-input" type="checkbox" name="dog-walking">
 				<label class="form-check-label" for="gridCheck1">Dog walking</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="fundraisers">
+				<input class="form-check-input" type="checkbox" name="fundraisers">
 				<label class="form-check-label" for="gridCheck1">Fundraisers</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="helping-at-adoptions">
+				<input class="form-check-input" type="checkbox" name="helping-at-adoptions">
 				<label class="form-check-label" for="gridCheck1">Helping at Adoptions</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="transporting">
+				<input class="form-check-input" type="checkbox" name="transporting">
 				<label class="form-check-label" for="gridCheck1">Transporting</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="vet-appointments">
+				<input class="form-check-input" type="checkbox" name="vet-appointments">
 				<label class="form-check-label" for="gridCheck1">Vet appointments</label>
 			</div>
-			<input class="form-control" placeholder="Other..." id="volunteering-other">
+			<input class="form-control" placeholder="Other..." name="volunteering-other">
 	    </div>
     </div>
 
@@ -151,27 +151,27 @@
 		<label for="email" class="col-sm-2 col-form-label">I'm interested in fostering/adopting a dog that is:</label>
 		<div class="col-sm-10">
 	    	<div class="form-check">
-	        	<input class="form-check-input" type="checkbox" id="female">
+	        	<input class="form-check-input" type="checkbox" name="female">
 				<label class="form-check-label" for="gridCheck1">Female</label>
 	    	</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="male">
+				<input class="form-check-input" type="checkbox" name="male">
 				<label class="form-check-label" for="gridCheck1">Male</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="small">
+				<input class="form-check-input" type="checkbox" name="small">
 				<label class="form-check-label" for="gridCheck1">Small (less than 30 lbs)</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="large">
+				<input class="form-check-input" type="checkbox" name="large">
 				<label class="form-check-label" for="gridCheck1">Large (50 lbs and up)</label>
 			</div>
 			<div class="form-check">
-				<input class="form-check-input" type="checkbox" id="age">
+				<input class="form-check-input" type="checkbox" name="age">
 				<label class="form-check-label" for="gridCheck1">Age</label>
 			</div>
-			<input class="form-control" placeholder="Only these breeds..." id="breeds">
-			<input class="form-control" placeholder="Other specifications..." id="fostering-other">
+			<input class="form-control" placeholder="Only these breeds..." name="breeds">
+			<input class="form-control" placeholder="Other specifications..." name="fostering-other">
 	    </div>
     </div>
 
