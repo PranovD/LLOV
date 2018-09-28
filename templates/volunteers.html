@@ -2,180 +2,212 @@
 
 {% block content %}
 
-<form action = "/volunteers" method = "POST">
-	<div class="form-group row">
-		<label for="name" class="col-sm-2 col-form-label">Name</label>
-	    <div class="col-sm-10">
-	    	<input class="form-control" placeholder="First and Last Name" name="fullName">
-	    </div>
-	</div>
-	<div class="form-group row">
-    	<label for="email" class="col-sm-2 col-form-label">Email</label>
-    	<div class="col-sm-10">
-      		<input type="email" class="form-control" name="email" placeholder="Email">
-    	</div>
-  	</div>
-	<div class="form-group row">
-		<label for="example-text-input" class="col-sm-2 col-form-label">Address</label>
-	    <div class="col-sm-10">
-			<input class="form-control" placeholder="Street Address" name="street">
-			<input class="form-control" placeholder="City" name="city">
-			<select class="form-control" id="exampleSelect1">
-				<option value="GA">Georgia</option>
-				<option value="AL">Alabama</option>
-				<option value="AK">Alaska</option>
-				<option value="AZ">Arizona</option>
-				<option value="AR">Arkansas</option>
-				<option value="CA">California</option>
-				<option value="CO">Colorado</option>
-				<option value="CT">Connecticut</option>
-				<option value="DE">Delaware</option>
-				<option value="DC">District Of Columbia</option>
-				<option value="FL">Florida</option>
-				<option value="HI">Hawaii</option>
-				<option value="ID">Idaho</option>
-				<option value="IL">Illinois</option>
-				<option value="IN">Indiana</option>
-				<option value="IA">Iowa</option>
-				<option value="KS">Kansas</option>
-				<option value="KY">Kentucky</option>
-				<option value="LA">Louisiana</option>
-				<option value="ME">Maine</option>
-				<option value="MD">Maryland</option>
-				<option value="MA">Massachusetts</option>
-				<option value="MI">Michigan</option>
-				<option value="MN">Minnesota</option>
-				<option value="MS">Mississippi</option>
-				<option value="MO">Missouri</option>
-				<option value="MT">Montana</option>
-				<option value="NE">Nebraska</option>
-				<option value="NV">Nevada</option>
-				<option value="NH">New Hampshire</option>
-				<option value="NJ">New Jersey</option>
-				<option value="NM">New Mexico</option>
-				<option value="NY">New York</option>
-				<option value="NC">North Carolina</option>
-				<option value="ND">North Dakota</option>
-				<option value="OH">Ohio</option>
-				<option value="OK">Oklahoma</option>
-				<option value="OR">Oregon</option>
-				<option value="PA">Pennsylvania</option>
-				<option value="RI">Rhode Island</option>
-				<option value="SC">South Carolina</option>
-				<option value="SD">South Dakota</option>
-				<option value="TN">Tennessee</option>
-				<option value="TX">Texas</option>
-				<option value="UT">Utah</option>
-				<option value="VT">Vermont</option>
-				<option value="VA">Virginia</option>
-				<option value="WA">Washington</option>
-				<option value="WV">West Virginia</option>
-				<option value="WI">Wisconsin</option>
-				<option value="WY">Wyoming</option>
-			</select>
-			<input class="form-control" placeholder="Zip Code" name="zipcode">
-	    </div>
-	</div>
-	<div class="form-group row">
-    	<label for="email" class="col-sm-2 col-form-label">Phone</label>
-    	<div class="col-sm-10">
-      		<input type="email" class="form-control" name="phone" placeholder="Number">
-    	</div>
-  	</div>
-	<div class="form-group row">
-		<label for="email" class="col-sm-2 col-form-label">I'm interested in ...</label>
-		<div class="col-sm-10">
-	    	<div class="form-check">
-	        	<input class="form-check-input" type="checkbox" name="volunteering">
-				<label class="form-check-label" for="gridCheck1">Volunteering</label>
-	    	</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="fostering">
-				<label class="form-check-label" for="gridCheck1">Fostering</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="adopting">
-				<label class="form-check-label" for="gridCheck1">Adopting</label>
-			</div>
-	    </div>
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="data-table" data-toggle="pill" href="#pills-table" role="tab" aria-controls="pills-home" aria-selected="true">Volunteers Table</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="form" data-toggle="pill" href="#pills-form" role="tab" aria-controls="pills-profile" aria-selected="false">Form</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="data-table">
+            <h3>Volunteers Table</h3>
+            <br>
+            <ul class="list-group">
+                <li class="list-group-item">Volunteer Data</li>
+{#                <li class="list-group-item">{{ data.val()}}</li>#}
+            </ul>
+        </div>
 
-    </div>
-	<div class="form-group row">
-		<label for="email" class="col-sm-2 col-form-label">I'm interested in volunteering in the following ways:</label>
-		<div class="col-sm-10">
-	    	<div class="form-check">
-	        	<input class="form-check-input" type="checkbox" name="long-term-foster">
-				<label class="form-check-label" for="gridCheck1">Long-term foster</label>
-	    	</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="short-term-foster">
-				<label class="form-check-label" for="gridCheck1">Short-term foster</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="emergency-foster">
-				<label class="form-check-label" for="gridCheck1">Emergency foster (1-2 days)</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="coordinating">
-				<label class="form-check-label" for="gridCheck1">Coordinating</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="putting-up-flyers">
-				<label class="form-check-label" for="gridCheck1">Putting up flyers</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="dog-walking">
-				<label class="form-check-label" for="gridCheck1">Dog walking</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="fundraisers">
-				<label class="form-check-label" for="gridCheck1">Fundraisers</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="helping-at-adoptions">
-				<label class="form-check-label" for="gridCheck1">Helping at Adoptions</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="transporting">
-				<label class="form-check-label" for="gridCheck1">Transporting</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="vet-appointments">
-				<label class="form-check-label" for="gridCheck1">Vet appointments</label>
-			</div>
-			<input class="form-control" placeholder="Other..." name="volunteering-other">
-	    </div>
+        <div class="tab-pane fade" id="pills-form" role="tabpanel" aria-labelledby="form">
+            <h3>Register a Volunteer</h3>
+            <div class="justify-content-center">
+                <article>
+                    <form action="/volunteers" method="POST">
+                        <div class="form-row">
+                            <div class = "col form-group">
+                                <label>Name</label>
+                                <input class="form-control" placeholder="First and Last Name" name="fullName">                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class = "col form-group">
+                                <label>Email</label>
+                                <input class="form-control" placeholder="Email" name="email">                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Address</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" placeholder="Street Address" name="street">
+                                <input class="form-control" placeholder="City" name="city">
+                                <select class="form-control" id="exampleSelect1">
+                                    <option value="GA">Georgia</option>
+                                    <option value="AL">Alabama</option>
+                                    <option value="AK">Alaska</option>
+                                    <option value="AZ">Arizona</option>
+                                    <option value="AR">Arkansas</option>
+                                    <option value="CA">California</option>
+                                    <option value="CO">Colorado</option>
+                                    <option value="CT">Connecticut</option>
+                                    <option value="DE">Delaware</option>
+                                    <option value="DC">District Of Columbia</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="HI">Hawaii</option>
+                                    <option value="ID">Idaho</option>
+                                    <option value="IL">Illinois</option>
+                                    <option value="IN">Indiana</option>
+                                    <option value="IA">Iowa</option>
+                                    <option value="KS">Kansas</option>
+                                    <option value="KY">Kentucky</option>
+                                    <option value="LA">Louisiana</option>
+                                    <option value="ME">Maine</option>
+                                    <option value="MD">Maryland</option>
+                                    <option value="MA">Massachusetts</option>
+                                    <option value="MI">Michigan</option>
+                                    <option value="MN">Minnesota</option>
+                                    <option value="MS">Mississippi</option>
+                                    <option value="MO">Missouri</option>
+                                    <option value="MT">Montana</option>
+                                    <option value="NE">Nebraska</option>
+                                    <option value="NV">Nevada</option>
+                                    <option value="NH">New Hampshire</option>
+                                    <option value="NJ">New Jersey</option>
+                                    <option value="NM">New Mexico</option>
+                                    <option value="NY">New York</option>
+                                    <option value="NC">North Carolina</option>
+                                    <option value="ND">North Dakota</option>
+                                    <option value="OH">Ohio</option>
+                                    <option value="OK">Oklahoma</option>
+                                    <option value="OR">Oregon</option>
+                                    <option value="PA">Pennsylvania</option>
+                                    <option value="RI">Rhode Island</option>
+                                    <option value="SC">South Carolina</option>
+                                    <option value="SD">South Dakota</option>
+                                    <option value="TN">Tennessee</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="UT">Utah</option>
+                                    <option value="VT">Vermont</option>
+                                    <option value="VA">Virginia</option>
+                                    <option value="WA">Washington</option>
+                                    <option value="WV">West Virginia</option>
+                                    <option value="WI">Wisconsin</option>
+                                    <option value="WY">Wyoming</option>
+                                </select>
+                                <input class="form-control" placeholder="Zip Code" name="zipcode">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label>Phone Number</label>
+                                    <input name="age" type="text" class="form-control" placeholder="Phone Number" name="number">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group row">
+                                <label>I'm interested in ...</label>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="volunteering">
+                                        <label class="form-check-label" for="gridCheck1">Volunteering</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="fostering">
+                                        <label class="form-check-label" for="gridCheck1">Fostering</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="adopting">
+                                        <label class="form-check-label" for="gridCheck1">Adopting</label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-group row">
+                                <label>I'm interested in volunteering in the following ways:</label>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="long-term-foster">
+                                        <label class="form-check-label" for="gridCheck1">Long-term foster</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="short-term-foster">
+                                        <label class="form-check-label" for="gridCheck1">Short-term foster</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="emergency-foster">
+                                        <label class="form-check-label" for="gridCheck1">Emergency foster (1-2 days)</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="coordinating">
+                                        <label class="form-check-label" for="gridCheck1">Coordinating</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="putting-up-flyers">
+                                        <label class="form-check-label" for="gridCheck1">Putting up flyers</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="dog-walking">
+                                        <label class="form-check-label" for="gridCheck1">Dog walking</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="fundraisers">
+                                        <label class="form-check-label" for="gridCheck1">Fundraisers</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="helping-at-adoptions">
+                                        <label class="form-check-label" for="gridCheck1">Helping at Adoptions</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="transporting">
+                                        <label class="form-check-label" for="gridCheck1">Transporting</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="vet-appointments">
+                                        <label class="form-check-label" for="gridCheck1">Vet appointments</label>
+                                    </div>
+                                    <input class="form-control" placeholder="Other..." name="volunteering-other">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+        <label>I'm interested in fostering/adopting a dog that is:</label>
+        <div class="col-sm-10">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="female">
+                <label class="form-check-label" for="gridCheck1">Female</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="male">
+                <label class="form-check-label" for="gridCheck1">Male</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="small">
+                <label class="form-check-label" for="gridCheck1">Small (less than 30 lbs)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="large">
+                <label class="form-check-label" for="gridCheck1">Large (50 lbs and up)</label>
+            </div>
+            <input class="form-control" placeholder="Only these breeds..." name="breeds">
+            <input class="form-control" placeholder="Other specifications..." name="fostering-other">
+        </div>
     </div>
 
-	<div class="form-group row">
-		<label for="email" class="col-sm-2 col-form-label">I'm interested in fostering/adopting a dog that is:</label>
-		<div class="col-sm-10">
-	    	<div class="form-check">
-	        	<input class="form-check-input" type="checkbox" name="female">
-				<label class="form-check-label" for="gridCheck1">Female</label>
-	    	</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="male">
-				<label class="form-check-label" for="gridCheck1">Male</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="small">
-				<label class="form-check-label" for="gridCheck1">Small (less than 30 lbs)</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="large">
-				<label class="form-check-label" for="gridCheck1">Large (50 lbs and up)</label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input" type="checkbox" name="age">
-				<label class="form-check-label" for="gridCheck1">Age</label>
-			</div>
-			<input class="form-control" placeholder="Only these breeds..." name="breeds">
-			<input class="form-control" placeholder="Other specifications..." name="fostering-other">
-	    </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block"> Submit Form </button>
+                        </div>
+                    </form>
+                </article>
+                {#        <div class="border-top card-body text-center">Bottom text</div>#}
+            </div>
+        </div>
     </div>
-
-	<button type="submit" class="btn btn-primary btn-lg btn-block">Submit Form</button>
-</form>
+    </div>
 
 {% endblock %}
