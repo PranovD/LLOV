@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, json
 import os
 import pymongo
 import pyrebase
+import datetime
 
 try:
     from keys import keys
@@ -45,10 +46,36 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/dogs')
+@app.route('/dogs', methods = ['POST', 'GET'])
 def dogs():
+    if request.method == 'POST':
+        name = request.form.get('dogName') # TEXT BOX
+        gender = request.form['gender'] # RADIO BUTTON
+        age = request.form.get('age')
+        weight = request.form.get('weight')
+        breed = request.form.get('breed')
+        comments = request.form.get('comments')
+        diseases = request.form.get('diseases')
+        dogAggressive = request.form.get('dog-aggressive')
+        humanAggressive = request.form.get('human-aggressive')
+
+        data = {
+            'Age': int(age),
+            'Breed': breed,
+            'Gender': gender,
+            'Name': name,
+            'Weight': int(weight),
+            'characteristics':
+                {'comments': comments.split(","),
+                'diseases': diseases,
+                'dog_aggressive': dogAggressive,
+                'human_aggressive': humanAggressive},
+            'date_added': str(datetime.datetime.now())
+        }
+        db.child("fosterdogs").push(data)
+
     dogData = db.child("fosterdogs").get()
-    print(dogData.val()) # {"Morti": {"name": "Mortimer 'Morty' Smith"}, "Rick": {"name": "Rick Sanchez"}}
+
     return render_template('fosterdogs.html', data=dogData, page="Foster Dogs")
 
 @app.route('/volunteers', methods = ['POST', 'GET'])
