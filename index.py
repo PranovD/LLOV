@@ -86,18 +86,46 @@ def volunteers():
     return render_template('volunteers.html', page="Volunteers")
 
 
-@app.route('/fosters')
+@app.route('/fosters', methods = ['POST', 'GET'])
 def fosters():
-    pyreObj = db.child("fosters").get().val()
-    data=[]
-    for x, (key, value) in enumerate(pyreObj.items()):
-        data.append(value)
+    # pyreObj = db.child("fosters").get().val()
+    # data=[]
+    # for x, (key, value) in enumerate(pyreObj.items()):
+    #     data.append(value)
 
-    print(data)
-    # print(fosterData.val())
-    # print(type(fosterData))
-    # print(type(fosterData.val()))
-    return render_template('fosters.html', data=data, pyreObj=pyreObj, page="Foster Volunteers")
+    if request.method == 'POST':
+        name = request.form.get('fosterName')
+        street = request.form.get('street')
+        city = request.form.get('city')
+        state = request.form.get('state')
+        zipcode = request.form.get('zipcode')
+        canAdoptMore = request.form.get('source')
+        humanFriendly = request.form.get('human-friendly')
+        dogFriendly = request.form.get('dog-friendly')
+        comments = request.form.get('comments')
+
+        data = {
+            'Name': name,
+            'Address': {
+                'Street': street,
+                'City': city,
+                'State': state,
+                'Zipcode': zipcode,
+            },
+            'canAdoptMore': canAdoptMore,
+            'dog_preferences': {
+                'dogFriendly': dogFriendly,
+                'humanFriendly': humanFriendly,
+                'comments': comments
+            },
+            'timestamp': str(datetime.datetime.now())
+        }
+        db.child("fosters").push(data)
+
+    fosterData = db.child("fosters").get()
+    return render_template('fosters.html', data=fosterData, page="Foster Volunteers")
+
+    # return render_template('fosters.html', data=data, pyreObj=pyreObj, page="Foster Volunteers")
 
 
 @app.route('/donations', methods = ['POST', 'GET'])
