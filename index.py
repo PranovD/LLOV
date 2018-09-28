@@ -83,6 +83,59 @@ def volunteers():
     if request.method == 'POST':
         print(request.form.get('firstName'))
 
+        name = request.form.get('fullName')  # TEXT BOX
+        email = request.form['email']  # RADIO BUTTON
+        street = request.form.get('street')
+        city = request.form.get('city')
+        state = request.form.get('state')
+        zip = request.form.get('zipcode')
+        number = request.form.get('number')
+
+        # commitment
+        volunteering = request.form.get('volunteering')
+        Fostering = request.form.get('fostering')
+        Adopting = request.form.get('adopting')
+
+        # volunteering
+        longterm = request.form.get('long-term-foster')
+        shortterm= request.form.get('short-term-foster')
+        emergency= request.form.get('emergency-foster')
+        coord= request.form.get('coordinating')
+        flyers= request.form.get('putting-up-flyers')
+        dogwalking= request.form.get('dog-walking')
+        fundraising= request.form.get('fundraisers')
+        adoptions= request.form.get('helping-at-adoptions')
+        transporting= request.form.get('transporting')
+        vet = request.form.get('vet-appointments')
+        other = request.form.get('volunteering-other')
+
+        # foster_requirements
+        female = request.form.get('female')
+        male = request.form.get('male')
+        small = request.form.get('small')
+        large = request.form.get('large')
+
+        breeds = request.form.get('breeds')
+        other = request.form.get('fostering-other')
+
+        dogAggressive = request.form.get('dog-aggressive')
+        humanAggressive = request.form.get('human-aggressive')
+
+        # data = {
+        #     'Age': int(age),
+        #     'Breed': breed,
+        #     'Gender': gender,
+        #     'Name': name,
+        #     'Weight': int(weight),
+        #     'characteristics':
+        #         {'comments': comments.split(","),
+        #          'diseases': diseases,
+        #          'dog_aggressive': dogAggressive,
+        #          'human_aggressive': humanAggressive},
+        #     'date_added': str(datetime.datetime.now())
+        # }
+        # db.child("fosterdogs").push(data)
+
     return render_template('volunteers.html', page="Volunteers")
 
 
