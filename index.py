@@ -64,8 +64,9 @@ def fosters():
     pyreObj = db.child("fosters").get().val()
     data=[]
     for x, (key, value) in enumerate(pyreObj.items()):
-      data.append(value)
+        data.append(value)
 
+    print(data)
     # print(fosterData.val())
     # print(type(fosterData))
     # print(type(fosterData.val()))
