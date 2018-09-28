@@ -81,20 +81,18 @@ def dogs():
 @app.route('/volunteers', methods = ['POST', 'GET'])
 def volunteers():
     if request.method == 'POST':
-        print(request.form.get('firstName'))
-
         name = request.form.get('fullName')  # TEXT BOX
-        email = request.form['email']  # RADIO BUTTON
+        email = request.form.get('email')  # RADIO BUTTON
         street = request.form.get('street')
         city = request.form.get('city')
         state = request.form.get('state')
-        zip = request.form.get('zipcode')
+        zipcode = request.form.get('zipcode')
         number = request.form.get('number')
 
         # commitment
         volunteering = request.form.get('volunteering')
-        Fostering = request.form.get('fostering')
-        Adopting = request.form.get('adopting')
+        fostering = request.form.get('fostering')
+        adopting = request.form.get('adopting')
 
         # volunteering
         longterm = request.form.get('long-term-foster')
@@ -107,36 +105,57 @@ def volunteers():
         adoptions= request.form.get('helping-at-adoptions')
         transporting= request.form.get('transporting')
         vet = request.form.get('vet-appointments')
-        other = request.form.get('volunteering-other')
+        volunteering_other = request.form.get('volunteering-other')
 
         # foster_requirements
         female = request.form.get('female')
         male = request.form.get('male')
         small = request.form.get('small')
         large = request.form.get('large')
-
         breeds = request.form.get('breeds')
-        other = request.form.get('fostering-other')
+        fostering_other = request.form.get('fostering-other')
 
-        dogAggressive = request.form.get('dog-aggressive')
-        humanAggressive = request.form.get('human-aggressive')
+        data = {
+            'Name': name,
+            'Address': {
+                'Street': street,
+                'City': city,
+                'State': state,
+                'Zipcode': zipcode,
+            },
+            'Phone_Number': number,
+            'Volunteering': {
+                'can_volunteer': volunteering,
+                'longterm': longterm,
+                'shortterm': shortterm,
+                'emergency': emergency,
+                'coord': coord,
+                'flyers': flyers,
+                'dogwalking': dogwalking,
+                'fundraising': fundraising,
+                'adoptions': adoptions,
+                'transporting': transporting,
+                'vet': vet,
+                'other': volunteering_other,
+            },
+            'Adoption_Fostering': {
+                'can_adopt': adopting,
+                'can_foster': fostering,
+                'dogTypes': {
+                    'female': female,
+                    'male': male,
+                    'small': small,
+                    'large': large,
+                    'breeds': breeds,
+                    'other': fostering_other
+                }
+            }
+        }
 
-        # data = {
-        #     'Age': int(age),
-        #     'Breed': breed,
-        #     'Gender': gender,
-        #     'Name': name,
-        #     'Weight': int(weight),
-        #     'characteristics':
-        #         {'comments': comments.split(","),
-        #          'diseases': diseases,
-        #          'dog_aggressive': dogAggressive,
-        #          'human_aggressive': humanAggressive},
-        #     'date_added': str(datetime.datetime.now())
-        # }
-        # db.child("fosterdogs").push(data)
+        db.child("volunteers").push(data)
 
-    return render_template('volunteers.html', page="Volunteers")
+    volunteerData = db.child("volunteers").get()
+    return render_template('volunteers.html', data=volunteerData, page="Volunteers")
 
 
 @app.route('/fosters', methods = ['POST', 'GET'])
