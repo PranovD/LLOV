@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, json
+from flask import Flask, request, render_template, json, jsonify
 import os
 import pymongo
 import pyrebase
@@ -28,61 +28,65 @@ config = {
 }
 
 app = Flask(__name__)
-
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 user = auth.sign_in_with_email_and_password("tester@llov.com", "tester")
 db = firebase.database()
 
 
-
 @app.route('/')
 def index():
     return render_template('main.html', page="Main")
-
 
 @app.route('/login')
 def login():
     return render_template('login.html')
 
 
-@app.route('/dogs', methods = ['POST', 'GET'])
-def dogs():
+@app.route('/dog', methods = ['POST', 'GET'])
+def postToDog():
+    error = False
+    errorData = ""
     if request.method == 'POST':
         name = request.form.get('dogName') # TEXT BOX
-        gender = request.form['gender'] # RADIO BUTTON
+        gender = request.form.get('gender') # RADIO BUTTON
         age = request.form.get('age')
         weight = request.form.get('weight')
         breed = request.form.get('breed')
         comments = request.form.get('comments')
         diseases = request.form.get('diseases')
         dogAggressive = request.form.get('dog-aggressive')
-        humanAggressive = request.form.get('human-aggressive')
 
-        data = {
-            'Age': int(age),
-            'Breed': breed,
-            'Gender': gender,
-            'Name': name,
-            'Weight': int(weight),
-            'characteristics':
-                {'comments': comments.split(","),
+        if name == None or len(name) == 0 or age == None or len(age) == 0 \
+        or weight == None or len(weight) == 0 or breed == None or len(breed) == 0:
+            error = True
+            errorData = "All fields must be filled out."
+
+        if not error:
+            data = {
+                'age': int(age),
+                'breed': breed,
+                'gender': gender,
+                'name': name,
+                'weight': int(weight),
+                'comments': comments.split(","),
                 'diseases': diseases,
                 'dog_aggressive': dogAggressive,
-                'human_aggressive': humanAggressive},
-            'date_added': str(datetime.datetime.now())
-        }
-        db.child("fosterdogs").push(data)
+                'date_added': str(datetime.datetime.now())
+            }
+            db.child("fosterdogs").push(data)
 
-    dogData = db.child("fosterdogs").get()
+    return render_template('dog.html', page="Foster Dog", error=error, errorData=errorData)
 
-    return render_template('fosterdogs.html', data=dogData, page="Foster Dogs")
 
-@app.route('/volunteers', methods = ['POST', 'GET'])
+@app.route('/volunteer', methods = ['POST', 'GET'])
 def volunteers():
+    error = False
+    errorData = ""
     if request.method == 'POST':
-        name = request.form.get('fullName')  # TEXT BOX
-        email = request.form.get('email')  # RADIO BUTTON
+        first_name = request.form.get('firstName')
+        last_name = request.form.get('lastName')
+        email = request.form.get('email')
         street = request.form.get('street')
         city = request.form.get('city')
         state = request.form.get('state')
@@ -116,15 +120,14 @@ def volunteers():
         fostering_other = request.form.get('fostering-other')
 
         data = {
-            'Name': name,
-            'Address': {
-                'Street': street,
-                'City': city,
-                'State': state,
-                'Zipcode': zipcode,
-            },
-            'Phone_Number': number,
-            'Volunteering': {
+            'first_name': first_name,
+            'last_name': last_name,
+            'street': street,
+            'city': city,
+            'state': state,
+            'zipcode': zipcode,
+            'phone_number': number,
+            'volunteering': {
                 'can_volunteer': volunteering,
                 'longterm': longterm,
                 'shortterm': shortterm,
@@ -138,7 +141,7 @@ def volunteers():
                 'vet': vet,
                 'other': volunteering_other,
             },
-            'Adoption_Fostering': {
+            'adoption_fostering': {
                 'can_adopt': adopting,
                 'can_foster': fostering,
                 'dogTypes': {
@@ -154,81 +157,94 @@ def volunteers():
 
         db.child("volunteers").push(data)
 
-    volunteerData = db.child("volunteers").get()
-    return render_template('volunteers.html', data=volunteerData, page="Volunteers")
+    return render_template('volunteer.html', page="Volunteers", error=error, errorData=errorData)
 
 
-@app.route('/fosters', methods = ['POST', 'GET'])
-def fosters():
-    # pyreObj = db.child("fosters").get().val()
-    # data=[]
-    # for x, (key, value) in enumerate(pyreObj.items()):
-    #     data.append(value)
-
+@app.route('/foster', methods = ['POST', 'GET'])
+def postToFosters():
+    error = False
+    errorData = ""
     if request.method == 'POST':
-        name = request.form.get('fosterName')
+        first_name = request.form.get('firstName')
+        last_name = request.form.get('lastName')
         street = request.form.get('street')
         city = request.form.get('city')
         state = request.form.get('state')
         zipcode = request.form.get('zipcode')
+        phone = request.form.get('number')
         canAdoptMore = request.form.get('source')
-        humanFriendly = request.form.get('human-friendly')
-        dogFriendly = request.form.get('dog-friendly')
         comments = request.form.get('comments')
 
-        data = {
-            'Name': name,
-            'Address': {
-                'Street': street,
-                'City': city,
-                'State': state,
-                'Zipcode': zipcode,
-            },
-            'canAdoptMore': canAdoptMore,
-            'dog_preferences': {
-                'dogFriendly': dogFriendly,
-                'humanFriendly': humanFriendly,
-                'comments': comments
-            },
-            'timestamp': str(datetime.datetime.now())
-        }
-        db.child("fosters").push(data)
+        if first_name == None or len(first_name) == 0 or last_name == None or len(last_name) == 0:
+            error = True
+            errorData = "All fields must be filled out."
 
-    fosterData = db.child("fosters").get()
-    return render_template('fosters.html', data=fosterData, page="Foster Volunteers")
+        if not error:
+            data = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'street': street,
+                'city': city,
+                'state': state,
+                'zipcode': zipcode,
+                'canAdoptMore': canAdoptMore,
+                'comments': comments,
+                'timestamp': str(datetime.datetime.now())
+            }
+            db.child("fosters").push(data)
 
-    # return render_template('fosters.html', data=data, pyreObj=pyreObj, page="Foster Volunteers")
+    return render_template('foster.html', page="Fosters", error=error, errorData=errorData)
 
-
-@app.route('/donations', methods = ['POST', 'GET'])
-def donationsPage():
+@app.route('/donation', methods = ['POST', 'GET'])
+def postToDonation():
+    error = False
+    errorData = ""
     if request.method == 'POST':
-        name = request.form.get('donorName')
+        first_name = request.form.get('firstName')
+        last_name = request.form.get('lastName')
         amount = request.form.get('amount')
         source = request.form.get('source')
         comments = request.form.get('comments')
 
-        data = {
-            'Name': name,
-            'amount': amount,
-            'comments': comments,
-            'source': source,
-            'timestamp': str(datetime.datetime.now())
-        }
-        db.child("donation").push(data)
+        if first_name == None or last_name == None or source == None \
+        or len(first_name) == 0 or len(source) == 0 or len(last_name) == 0:
+            error = True
+            errorData = "All fields must be filled out."
 
-    donationData = db.child("donation").get()
-    return render_template('donations.html', data=donationData, page="Donations")
+        if not error:
+            try:
+                amount = float(amount)
 
+            except:
+                error = True
+                errorData = "Amount field has to be a valid $ amount."
 
-@app.route('/forms', methods=['GET'])
-def formsPage():
-    pass
+        if not error:
+            data = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'amount': amount,
+                'comments': comments,
+                'source': source,
+                'timestamp': str(datetime.datetime.now())
+            }
+            db.child("donations").push(data)
 
+    return render_template('donation.html', page="Donations", error=error, errorData=errorData)
 
 @app.route('/data')
-def dataPage():
-    return json.jsonify(db.get().val())
+def returnData():
+    table = request.args.get('table')
+    if table is None:
+        table = "donations"
+    getData, keys = dataFrom(table)
+    return render_template('data.html', data=getData, keys=keys)
+
+def dataFrom(collection):
+    print(collection)
+    data = [item.val() for item in db.child(collection).get().each()]
+    keys = [key.lower() for key in data[0].keys()]
+    return data, keys
 
 
 @app.route('/onAppLoad')

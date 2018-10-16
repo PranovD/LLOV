@@ -15,41 +15,18 @@
 {% block body %}
     <body>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="#">LLOV</a>
-	  		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-	    		<span class="navbar-toggler-icon"></span>
-	  		</button>
-		  	<div class="collapse navbar-collapse" id="navbarNav">
-		    	<ul class="navbar-nav mr-auto">
-
-					<li class="nav-item">
-						<a class="nav-link" href="/data">Data</a>
-					</li>
-
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				          Forms
-				        </a>
-				        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a class="dropdown-item" target="_blank" href="/dog">Dogs</a>
-							<a class="dropdown-item" target="_blank" href="/foster">Fosters</a>
-							<a class="dropdown-item" target="_blank" href="/donation">Donations</a>
-							<a class="dropdown-item" target="_blank" href="/volunteer">Volunteers</a>
-						</div>
-					</li>
-		    	</ul>
-		  	</div>
+			<a class="navbar-brand" href="#">Laskey's Lucky Ones and Friends</a>
 		</nav>
-
 		<div class="mainDiv">
-	        <!-- <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-	        	<h1 class="display-4">{{ page }} Page</h1>
-	        	<p class="lead">This is the {{ page }}  page.</p>
-	      	</div> -->
-
 			{% block content %}{% endblock %}
-
 		</div>
+
+		<div id="footer">
+			<br>
+			<br>
+			<p class="text-center">Laskey's is a non-profit organization.</p>
+		</div>
+
     </body>
 {% endblock %}
 
