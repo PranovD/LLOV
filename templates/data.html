@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <nav class="nav nav-pills">
+      <a class="nav-item nav-link active" href="/data?table=donations">Donations</a>
+      <a class="nav-item nav-link" href="/data?table=fosters">Fosters</a>
+      <a class="nav-item nav-link" href="/data?table=fosterdogs">Foster Dogs</a>
+      <a class="nav-item nav-link" href="/data?table=volunteers">Volunteers</a>
+    </nav>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Table</li>
+      </ol>
+    </nav>
+
+    <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="data-table">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+                {% for key in keys %}
+                    <th scope="col">{{ key }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in data %}
+            <tr>
+                {% for key in keys %}
+                    <td>{{ item[key] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

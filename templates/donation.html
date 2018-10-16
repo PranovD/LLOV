@@ -1,0 +1,64 @@
+{% extends "form_index.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+	<div class="col-md-6">
+		{% if error %}
+			<div class="alert alert-danger" role="alert">
+			  {{ errorData }}
+			</div>
+		{% endif %}
+
+		<div class="card">
+			<header class="card-header">
+				<h4 class="card-title mt-2">Donation Form</h4>
+			</header>
+			<article class="card-body">
+			    <form action = "/donation" method = "POST">
+				<div class="form-row">
+					<div class="col form-group">
+						<label>First name </label>
+			            <input type="text" class="form-control" placeholder="" name="firstName">
+					</div>
+					<div class="col form-group">
+						<label>Last name</label>
+			            <input type="text" class="form-control" placeholder="" name="lastName">
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Email address</label>
+					<input type="email" class="form-control" placeholder="">
+					<small class="form-text text-muted">We'll never share your email with anyone else.</small>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+			            <label>Amount($)</label>
+			            <input type="text" class="form-control" placeholder="" name="amount">
+					</div>
+					<div class="form-group col-md-6">
+					  <label>Donation Type</label>
+			          <select class="form-control" id="exampleSelect1" name="source">
+			              <option value="Choose..."></option>
+			              <option value="Cash">Cash</option>
+			              <option value="Check">Check</option>
+			              <option value="Venmo">Venmo</option>
+			              <option value="Cash App">Cash App</option>
+			          </select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Other Comments</label>
+			        <input type="text" class="form-control" placeholder="" name="comments">
+				</div>
+			    <div class="form-group">
+			        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+			    </div>
+			    <small class="text-muted">By clicking the 'Submit' button, you confirm that this is a non-refundable donation.</small>
+			</form>
+			</article>
+			<div class="border-top card-body text-center">Thank you for your donation!</a></div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
