@@ -241,11 +241,9 @@ def returnData():
     return render_template('data.html', data=getData, keys=keys, page=table)
 
 def dataFrom(collection):
-    print(collection)
-    data = [item.val() for item in db.child(collection).get().each()]
-    keys = [key.lower() for key in data[0].keys()]
+    data = [{'key': item.key(), 'val': item.val()} for item in db.child(collection).get().each()]
+    keys = [key.lower() for key in data[0]['val'].keys()]
     return data, keys
-
 
 @app.route('/onAppLoad')
 def onAppLoad():
