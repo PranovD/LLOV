@@ -238,7 +238,7 @@ def returnData():
     if table is None:
         table = "donations"
     getData, keys = dataFrom(table)
-    return render_template('data.html', data=getData, keys=keys)
+    return render_template('data.html', data=getData, keys=keys, page=table)
 
 def dataFrom(collection):
     print(collection)
