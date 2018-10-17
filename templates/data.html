@@ -1,21 +1,37 @@
 {% extends "index.html" %}
 
 {% block content %}
+{% set active_page = page %}
+
+{% set active_page = active_page|default('Donations') -%}
+
+{% set navigation_bar = [
+    ('/data?table=donations', 'donations', 'Donations'),
+    ('/data?table=fosters', 'fosters', 'Fosters'),
+    ('/data?table=fosterdogs', 'fosterdogs', 'Foster Dogs'),
+    ('/data?table=volunteers', 'volunteers', 'Volunteers')
+] -%}
 
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">
-        <a class="nav-item nav-link active" href="/data?table=donations">Donations</a>
-        <a class="nav-item nav-link" href="/data?table=fosters">Fosters</a>
-        <a class="nav-item nav-link" href="/data?table=fosterdogs">Foster Dogs</a>
-        <a class="nav-item nav-link" href="/data?table=volunteers">Volunteers</a>
+        {% for href, db, caption in navigation_bar %}
+            {% if db == active_page %}
+                <a class="nav-item nav-link active"
+            {% else %}
+                <a class="nav-item nav-link"
+            {% endif %}
+
+            href="{{ href|e }}">{{ caption|e }}</a>
+        {% endfor %}
     </nav>
+
 </div>
 
 <main role="main" class="container">
     <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
-        <img class="mr-3" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-outline.svg" alt="" width="48" height="48">
+        <img class="mr-3" src="{{ url_for('static',filename='imgs/folder.svg') }}" alt="" width="48" height="48">
         <div class="lh-100">
-            <h6 class="mb-0 text-white lh-100">Donations Table</h6>
+            <h6 class="mb-0 text-white lh-100">{{ page }} Table</h6>
             <small>Updated 2018</small>
         </div>
     </div>
