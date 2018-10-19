@@ -3,6 +3,8 @@ import os
 import pymongo
 import pyrebase
 import datetime
+import json
+import pandas as pd
 
 try:
     from keys import keys
@@ -36,7 +38,29 @@ db = firebase.database()
 
 @app.route('/')
 def index():
-    return render_template('main.html', page="Main")
+    table = "donations"
+    donnation_data, donnation_keys = dataFrom(table)
+    donation_amount = 0
+    donation_dates = []
+    donation_amounts = []
+    donation_types_graph = {'Cash': 0, 'Check': 0, 'Venmo': 0, 'Cashapp': 0}
+    for donation in donnation_data:
+        print (donation)
+        donation_amount += float(donation['val']['amount'])
+        date = donation['val']['timestamp'].split()
+        date = date[0].split('-')
+        date = date[1] + '-' + date[2] + '-' + date[0]
+        donation_dates.insert(0, date)
+        donation_amounts.insert(0, float(donation['val']['amount']))
+        donation_types_graph[donation['val']['source']] += float(donation['val']['amount'])
+
+    donation_dates, donation_amounts = zip(*sorted(zip(donation_dates, donation_amounts)))
+
+
+    table = "events"
+    event_data, event_keys = dataFrom(table)
+
+    return render_template('main.html', donation_pie_labels = donation_types_graph.keys(), donation_pie_values = donation_types_graph.values(), donation_dates=donation_dates, donation_amounts=donation_amounts, donation_graph_data=donnation_data, donation_amount=donation_amount, event_data=event_data, event_keys=event_keys,  page="Main")
 
 @app.route('/login')
 def login():
