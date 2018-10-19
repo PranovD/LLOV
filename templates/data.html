@@ -43,6 +43,12 @@
         </form>
     </div>
 
+    {% if error %}
+        <div class="d-flex align-items-center p-3 my-3 rounded box-shadow alert alert-danger" role="alert">
+          {{ errorData }}
+        </div>
+    {% endif %}
+
     <div class="my-3 p-3 bg-white rounded box-shadow">
         <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="data-table">
             <table class="table">
@@ -114,13 +120,13 @@
                     <div class="modal-footer">
                         <div class="form-row">
                             <div class="col">
-                                <input type="password" class="form-control btn-block" id="inputPassword2" placeholder="Password">
+                                <input type="password" class="form-control btn-block" name="password" id="inputPassword2" placeholder="Password">
                             </div>
                             <div class="col">
-                                <button type="submit" class="btn btn-primary btn-block">Save</button>
+                                <button type="submit" name="action" value="submit" class="btn btn-primary btn-block">Save</button>
                             </div>
                             <div class="col">
-                                <button type="button" class="btn btn-block btn-outline-danger">Delete</button>
+                                <button type="submit" name="action" value="delete" class="btn btn-block btn-outline-danger">Delete</button>
                             </div>
                         </div>
                     </div>
