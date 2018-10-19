@@ -251,11 +251,24 @@ def postToDonation():
 
     return render_template('donation.html', page="Donations", error=error, errorData=errorData)
 
-@app.route('/data')
+@app.route('/data', methods = ['POST', 'GET'])
 def returnData():
     table = request.args.get('table')
     if table is None:
         table = "donations"
+
+    if request.method == 'POST':
+        print(request.form)
+        id = request.form.get('id')[4:]
+
+        data = {}
+        for key in request.form.keys():
+            if key == 'id':
+                continue
+            data[key] = request.form.get(key)
+
+        db.child(table).child(id).set(data)
+
     getData, keys = dataFrom(table)
     return render_template('data.html', data=getData, keys=keys, page=table)
 
@@ -263,6 +276,12 @@ def dataFrom(collection):
     data = [{'key': item.key(), 'val': item.val()} for item in db.child(collection).get().each()]
     keys = [key.lower() for key in data[0]['val'].keys()]
     return data, keys
+
+
+@app.route('/update', methods = ['POST', 'GET'])
+def update():
+    print(request.args)
+    return returnData()
 
 @app.route('/onAppLoad')
 def onAppLoad():

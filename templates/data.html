@@ -78,7 +78,8 @@
                 data.push($(this).text().trim());
             });
             console.log(data);
-
+            console.log(data[1]);
+            console.log("hi");
             var innerHTML = "<table class='table'>"
 
             for (i = 0; i < keys.length; i++) {
@@ -86,44 +87,44 @@
                     <tr>\
                         <th scope='col'>" + keys[i] +  "</th>\
                         <td>\
-                            <form>\
-                                <input class='form-control' type='text' name='" + keys[i] + "'value="+ data[i] +">\
-                            </form>\
+                            <input class='form-control' type='text' name='" + keys[i] + "'value='"+ data[i] +"'>\
                         </td>\
                     </tr>"
             }
 
             innerHTML += "</tr></table>"
             document.getElementById("modalData").innerHTML = innerHTML;
-            document.getElementById("modalTitle").innerHTML = 'ID: ' + uniqueKey;
+            document.getElementById("disabledInput").value = 'ID: ' + uniqueKey;
         }
     </script>
 
     <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="modalData"></div>
-                <div class="modal-footer">
-                    <form>
-                      <div class="form-row">
-                        <div class="col">
-                            <input type="password" class="form-control btn-block" id="inputPassword2" placeholder="Password">
+                <form action = "/data?table={{page}}" method = "POST">
+                    <div class="modal-header">
+                        <input class="form-control" id="disabledInput" type="text" name="id" readonly="readonly">
+
+                        <!-- <h5 class="modal-title" id="modalTitle"></h5> -->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalData"></div>
+                    <div class="modal-footer">
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="password" class="form-control btn-block" id="inputPassword2" placeholder="Password">
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary btn-block">Save</button>
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-block btn-outline-danger">Delete</button>
+                            </div>
                         </div>
-                        <div class="col">
-                            <button type="button" class="btn btn-primary btn-block">Save</button>
-                        </div>
-                        <div class="col">
-                            <button type="button" class="btn btn-block btn-outline-danger">Delete</button>
-                        </div>
-                      </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
