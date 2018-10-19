@@ -18,6 +18,8 @@ PROJECT_ID = os.environ.get('PROJECT_ID') or keys['project_id']
 STORAGE_BUCKET = os.environ.get('STORAGE_BUCKET') or keys['storage_bucket']
 MESSAGING_SENDER_ID = os.environ.get('MESSAGING_SENDER_ID') or keys['messaging_sender_id']
 SERVICE_ACCOUNT = os.environ.get('SERVICE_ACCOUNT') or keys['service_account']
+DATA_CHANGE_KEY = os.environ.get('DATA_CHANGE_KEY') or keys['data_change_key']
+
 
 config = {
   "apiKey": API_KEY,
@@ -257,20 +259,30 @@ def returnData():
     if table is None:
         table = "donations"
 
+    error = False
+    errorData = ""
+
     if request.method == 'POST':
-        print(request.form)
-        id = request.form.get('id')[4:]
+        if request.form.get('password') == DATA_CHANGE_KEY:
+            id = request.form.get('id')[4:]
 
-        data = {}
-        for key in request.form.keys():
-            if key == 'id':
-                continue
-            data[key] = request.form.get(key)
+            if request.form.get('action') == 'delete':
+                db.child(table).child(id).remove()
 
-        db.child(table).child(id).set(data)
+            elif request.form.get('action') == 'submit':
+                data = {}
+                for key in request.form.keys():
+                    if key == 'id' or key == 'action' or key == 'password':
+                        continue
+                    data[key] = request.form.get(key)
+
+                db.child(table).child(id).set(data)
+        else:
+            error = True
+            errorData = "Password is incorrect"
 
     getData, keys = dataFrom(table)
-    return render_template('data.html', data=getData, keys=keys, page=table)
+    return render_template('data.html', data=getData, keys=keys, page=table, error=error, errorData=errorData)
 
 def dataFrom(collection):
     data = [{'key': item.key(), 'val': item.val()} for item in db.child(collection).get().each()]
