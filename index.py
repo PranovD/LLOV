@@ -18,7 +18,6 @@ PROJECT_ID = os.environ.get('PROJECT_ID') or keys['project_id']
 STORAGE_BUCKET = os.environ.get('STORAGE_BUCKET') or keys['storage_bucket']
 MESSAGING_SENDER_ID = os.environ.get('MESSAGING_SENDER_ID') or keys['messaging_sender_id']
 SERVICE_ACCOUNT = os.environ.get('SERVICE_ACCOUNT') or keys['service_account']
-DATA_CHANGE_KEY = os.environ.get('DATA_CHANGE_KEY') or keys['data_change_key']
 
 
 config = {
