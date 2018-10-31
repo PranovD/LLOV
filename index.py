@@ -1,46 +1,78 @@
-from flask import Flask, request, render_template, json, jsonify
+""" This module does blah blah blah """
+
 import os
-import pymongo
-import pyrebase
 import datetime
-import json
-import pandas as pd
+import plaid
+import pyrebase
+from flask import Flask, request, render_template, json, jsonify
+# import json
+# import flask_login
+# import pandas as pd
+# import pymongo
 
 try:
-    from keys import keys
+    import keys
 except:
     print("Keys File not Found. Online Access")
 
-API_KEY = os.environ.get('API_KEY') or keys['api_key']
-AUTH_DOMAIN = os.environ.get('AUTH_DOMAIN') or keys['auth_domain']
-DB_URL = os.environ.get('DB_URL') or keys['db_url']
-PROJECT_ID = os.environ.get('PROJECT_ID') or keys['project_id']
-STORAGE_BUCKET = os.environ.get('STORAGE_BUCKET') or keys['storage_bucket']
-MESSAGING_SENDER_ID = os.environ.get('MESSAGING_SENDER_ID') or keys['messaging_sender_id']
-SERVICE_ACCOUNT = os.environ.get('SERVICE_ACCOUNT') or keys['service_account']
+# PLAID API KEYS
+PLAID_CLIENT_ID = os.getenv('PLAID_CLIENT_ID') \
+    or keys.PLAID_API_KEYS['plaid_client_id']
+PLAID_SECRET = os.getenv('PLAID_SECRET') or keys.PLAID_API_KEYS['plaid_secret']
+PLAID_PUBLIC_KEY = os.getenv('PLAID_PUBLIC_KEY') \
+    or keys.PLAID_API_KEYS['plaid_public_key']
+PLAID_ENV = os.getenv('PLAID_ENV', 'sandbox') \
+    or keys.PLAID_API_KEYS['plaid_env']
+PLAID_VERS = os.getenv('PLAID_VERS') or keys.PLAID_API_KEYS['plaid_vers']
+ACCESS_TOKEN = None
+CLIENT = plaid.Client(client_id=PLAID_CLIENT_ID, secret=PLAID_SECRET,
+                      public_key=PLAID_PUBLIC_KEY, environment=PLAID_ENV,
+                      api_version=PLAID_VERS)
+
+# response = client.Item.public_token.exchange(public_token)
+# access_token = response['access_token']
+
+# FIREBASE KEYS
+API_KEY = os.environ.get('API_KEY') or keys.FIREBASE_KEYS['api_key']
+AUTH_DOMAIN = os.environ.get('AUTH_DOMAIN') \
+    or keys.FIREBASE_KEYS['auth_domain']
+DB_URL = os.environ.get('DB_URL') or keys.FIREBASE_KEYS['db_url']
+PROJECT_ID = os.environ.get('PROJECT_ID') or keys.FIREBASE_KEYS['project_id']
+STORAGE_BUCKET = os.environ.get('STORAGE_BUCKET') \
+    or keys.FIREBASE_KEYS['storage_bucket']
+MESSAGING_SENDER_ID = os.environ.get('MESSAGING_SENDER_ID') \
+    or keys.FIREBASE_KEYS['messaging_sender_id']
+SERVICE_ACCOUNT = os.environ.get('SERVICE_ACCOUNT') \
+    or keys.FIREBASE_KEYS['service_account']
+DATA_CHANGE_KEY = os.environ.get('DATA_CHANGE_KEY') \
+    or keys.FIREBASE_KEYS['data_change_key']
 
 
-config = {
-  "apiKey": API_KEY,
-  "authDomain": AUTH_DOMAIN,
-  "databaseURL": DB_URL,
-  "projectId": PROJECT_ID,
-  "storageBucket": STORAGE_BUCKET,
-  "messagingSenderId": MESSAGING_SENDER_ID,
-  "serviceAccount": SERVICE_ACCOUNT
+FIREBASE_CONFIG = {
+    "apiKey": API_KEY,
+    "authDomain": AUTH_DOMAIN,
+    "databaseURL": DB_URL,
+    "projectId": PROJECT_ID,
+    "storageBucket": STORAGE_BUCKET,
+    "messagingSenderId": MESSAGING_SENDER_ID,
+    "serviceAccount": SERVICE_ACCOUNT
 }
 
 app = Flask(__name__)
-firebase = pyrebase.initialize_app(config)
-auth = firebase.auth()
-user = auth.sign_in_with_email_and_password("tester@llov.com", "tester")
-db = firebase.database()
+FIREBASE = pyrebase.initialize_app(FIREBASE_CONFIG)
+AUTH = FIREBASE.auth()
+USER = AUTH.sign_in_with_email_and_password("tester@llov.com", "tester")
+DB = FIREBASE.database()
 
 
 @app.route('/')
 def index():
+    """
+    description
+    """
+
     table = "donations"
-    donnation_data, donnation_keys = dataFrom(table)
+    donnation_data, donation_keys = data_from(table)
     donation_amount = 0
     donation_dates = []
     donation_amounts = []
@@ -52,35 +84,56 @@ def index():
         date = date[1] + '-' + date[2] + '-' + date[0]
         donation_dates.insert(0, date)
         donation_amounts.insert(0, float(donation['val']['amount']))
-        donation_types_graph[donation['val']['source']] += float(donation['val']['amount'])
-    donation_dates, donation_amounts = zip(*sorted(zip(donation_dates, donation_amounts)))
+        donation_types_graph[donation['val']['source']] \
+            += float(donation['val']['amount'])
+    donation_dates, donation_amounts = zip(*sorted(zip(donation_dates,
+                                                       donation_amounts)))
     table = "events"
-    event_data, event_keys = dataFrom(table)
-    return render_template('main.html', donation_pie_labels = donation_types_graph.keys(), donation_pie_values = donation_types_graph.values(), donation_dates=donation_dates, donation_amounts=donation_amounts, donation_graph_data=donnation_data, donation_amount=donation_amount, event_data=event_data, event_keys=event_keys,  page="Main")
+    event_data, event_keys = data_from(table)
+    return render_template('main.html',
+                           donation_pie_labels=donation_types_graph.keys(),
+                           donation_pie_values=donation_types_graph.values(),
+                           donation_dates=donation_dates,
+                           donation_amounts=donation_amounts,
+                           donation_graph_data=donnation_data,
+                           donation_amount=donation_amount,
+                           event_data=event_data,
+                           event_keys=event_keys,
+                           page="Main")
+
 
 @app.route('/login')
 def login():
+    """
+    description
+    """
+
     return render_template('login.html')
 
 
-@app.route('/dog', methods = ['POST', 'GET'])
-def postToDog():
+@app.route('/dog', methods=['POST', 'GET'])
+def post_to_dog():
+    """
+    description
+    """
+
     error = False
-    errorData = ""
+    error_data = ""
     if request.method == 'POST':
-        name = request.form.get('dogName') # TEXT BOX
-        gender = request.form.get('gender') # RADIO BUTTON
+        name = request.form.get('dogName')
+        gender = request.form.get('gender')
         age = request.form.get('age')
         weight = request.form.get('weight')
         breed = request.form.get('breed')
         comments = request.form.get('comments')
         diseases = request.form.get('diseases')
-        dogAggressive = request.form.get('dog-aggressive')
+        dog_aggressive = request.form.get('dog-aggressive')
 
-        if name == None or len(name) == 0 or age == None or len(age) == 0 \
-        or weight == None or len(weight) == 0 or breed == None or len(breed) == 0:
+        if name is None or not name or age is None or not age \
+            or weight is None or not weight or breed is None \
+                or not breed:
             error = True
-            errorData = "All fields must be filled out."
+            error_data = "All fields must be filled out."
 
         if not error:
             data = {
@@ -91,22 +144,27 @@ def postToDog():
                 'weight': int(weight),
                 'comments': comments.split(","),
                 'diseases': diseases,
-                'dog_aggressive': dogAggressive,
+                'dog_aggressive': dog_aggressive,
                 'date_added': str(datetime.datetime.now())
             }
-            db.child("fosterdogs").push(data)
+            DB.child("fosterdogs").push(data)
 
-    return render_template('dog.html', page="Foster Dog", error=error, errorData=errorData)
+    return render_template('dog.html', page="Foster Dog",
+                           error=error, error_data=error_data)
 
 
-@app.route('/volunteer', methods = ['POST', 'GET'])
+@app.route('/volunteer', methods=['POST', 'GET'])
 def volunteers():
+    """
+    description
+    """
+
     error = False
-    errorData = ""
+    error_data = ""
     if request.method == 'POST':
         first_name = request.form.get('firstName')
         last_name = request.form.get('lastName')
-        email = request.form.get('email')
+        # email = request.form.get('email')
         street = request.form.get('street')
         city = request.form.get('city')
         state = request.form.get('state')
@@ -120,14 +178,14 @@ def volunteers():
 
         # volunteering
         longterm = request.form.get('long-term-foster')
-        shortterm= request.form.get('short-term-foster')
-        emergency= request.form.get('emergency-foster')
-        coord= request.form.get('coordinating')
-        flyers= request.form.get('putting-up-flyers')
-        dogwalking= request.form.get('dog-walking')
-        fundraising= request.form.get('fundraisers')
-        adoptions= request.form.get('helping-at-adoptions')
-        transporting= request.form.get('transporting')
+        shortterm = request.form.get('short-term-foster')
+        emergency = request.form.get('emergency-foster')
+        coord = request.form.get('coordinating')
+        flyers = request.form.get('putting-up-flyers')
+        dogwalking = request.form.get('dog-walking')
+        fundraising = request.form.get('fundraisers')
+        adoptions = request.form.get('helping-at-adoptions')
+        transporting = request.form.get('transporting')
         vet = request.form.get('vet-appointments')
         volunteering_other = request.form.get('volunteering-other')
 
@@ -175,15 +233,20 @@ def volunteers():
             }
         }
 
-        db.child("volunteers").push(data)
+        DB.child("volunteers").push(data)
 
-    return render_template('volunteer.html', page="Volunteers", error=error, errorData=errorData)
+    return render_template('volunteer.html', page="Volunteers",
+                           error=error, error_data=error_data)
 
 
-@app.route('/foster', methods = ['POST', 'GET'])
-def postToFosters():
+@app.route('/foster', methods=['POST', 'GET'])
+def post_to_fosters():
+    """
+    description
+    """
+
     error = False
-    errorData = ""
+    error_data = ""
     if request.method == 'POST':
         first_name = request.form.get('firstName')
         last_name = request.form.get('lastName')
@@ -191,13 +254,14 @@ def postToFosters():
         city = request.form.get('city')
         state = request.form.get('state')
         zipcode = request.form.get('zipcode')
-        phone = request.form.get('number')
-        canAdoptMore = request.form.get('source')
+        # phone = request.form.get('number')
+        can_adopt_more = request.form.get('source')
         comments = request.form.get('comments')
 
-        if first_name == None or len(first_name) == 0 or last_name == None or len(last_name) == 0:
+        if first_name is None or not first_name or last_name is None \
+                or not last_name:
             error = True
-            errorData = "All fields must be filled out."
+            error_data = "All fields must be filled out."
 
         if not error:
             data = {
@@ -207,18 +271,25 @@ def postToFosters():
                 'city': city,
                 'state': state,
                 'zipcode': zipcode,
-                'canAdoptMore': canAdoptMore,
+                'can_adopt_more': can_adopt_more,
                 'comments': comments,
                 'timestamp': str(datetime.datetime.now())
             }
-            db.child("fosters").push(data)
+            DB.child("fosters").push(data)
 
-    return render_template('foster.html', page="Fosters", error=error, errorData=errorData)
+    return render_template('foster.html', page="Fosters", error=error,
+                           error_data=error_data)
 
-@app.route('/donation', methods = ['POST', 'GET'])
+
+@app.route('/donation', methods=['POST', 'GET'])
 def postToDonation():
+    """
+    description
+    """
+
     error = False
-    errorData = ""
+    error_data = ""
+
     if request.method == 'POST':
         first_name = request.form.get('firstName')
         last_name = request.form.get('lastName')
@@ -226,76 +297,115 @@ def postToDonation():
         source = request.form.get('source')
         comments = request.form.get('comments')
 
-        if first_name == None or last_name == None or source == None \
-        or len(first_name) == 0 or len(source) == 0 or len(last_name) == 0:
+        if first_name is None or last_name is None or source is None \
+                or not first_name or not source \
+                or not last_name:
             error = True
-            errorData = "All fields must be filled out."
+            error_data = "All fields must be filled out."
 
-        if not error:
+        else:
             try:
                 amount = float(amount)
 
+                data = {
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'amount': amount,
+                    'comments': comments,
+                    'source': source,
+                    'timestamp': str(datetime.datetime.now())
+                }
+
+                DB.child("donations").push(data)
+
             except:
                 error = True
-                errorData = "Amount field has to be a valid $ amount."
+                error_data = "Amount field has to be a valid $ amount."
 
-        if not error:
-            data = {
-                'first_name': first_name,
-                'last_name': last_name,
-                'amount': amount,
-                'comments': comments,
-                'source': source,
-                'timestamp': str(datetime.datetime.now())
-            }
-            db.child("donations").push(data)
+    return render_template('donation.html', page="Donations",
+                           error=error, error_data=error_data)
 
-    return render_template('donation.html', page="Donations", error=error, errorData=errorData)
 
-@app.route('/data', methods = ['POST', 'GET'])
-def returnData():
-    table = request.args.get('table')
-    if table is None:
-        table = "donations"
-
+@app.route('/data', methods=['POST', 'GET'])
+def return_data():
+    """
+    description
+    """
+    get_balance = False
+    get_data = None
+    balance = None
     error = False
-    errorData = ""
+    error_data = ""
+    table = request.args.get('table')
+    get_keys = keys.FIREBASE_KEYS
 
-    if request.method == 'POST':
-        if request.form.get('password') == DATA_CHANGE_KEY:
-            id = request.form.get('id')[4:]
+    if table == "donations":
+        get_balance = True
 
-            if request.form.get('action') == 'delete':
-                db.child(table).child(id).remove()
+    try:
+        balance_response = CLIENT.Accounts.balance.get(ACCESS_TOKEN)
+        balance = json.dumps(balance_response, indent=2,
+                             sort_keys=True)
 
-            elif request.form.get('action') == 'submit':
-                data = {}
-                for key in request.form.keys():
-                    if key == 'id' or key == 'action' or key == 'password':
-                        continue
-                    data[key] = request.form.get(key)
+    except plaid.errors.PlaidError as err:
+        error = True
+        error_data = jsonify({'error': {'display_message':
+                                        err.display_message,
+                                        'error_code': err.code,
+                                        'error_type': err.type}})
 
-                db.child(table).child(id).set(data)
+    if request.form.get('password') == DATA_CHANGE_KEY:
+        id = request.form.get('id')[4:]
+
+        if request.form.get('action') == 'delete':
+            DB.child(table).child(id).remove()
+
+        elif request.form.get('action') == 'submit':
+            get_data, get_keys = data_from(table)
+            data = {}
+            for key in request.form.keys():
+                if key in ('id', 'action', 'password'):
+                    continue
+                data[key] = request.form.get(key)
+
+            DB.child(table).child(id).set(data)
+
         else:
             error = True
-            errorData = "Password is incorrect"
+            error_data = "Password is incorrect"
 
-    getData, keys = dataFrom(table)
-    return render_template('data.html', data=getData, keys=keys, page=table, error=error, errorData=errorData)
+    return render_template('data.html', data=get_data, get_keys=get_keys,
+                           page=table, error=error, error_data=error_data,
+                           get_balance=get_balance, balance=balance)
 
-def dataFrom(collection):
-    data = [{'key': item.key(), 'val': item.val()} for item in db.child(collection).get().each()]
+
+def data_from(collection):
+    """
+    description
+    """
+
+    data = [{'key': item.key(), 'val': item.val()}
+            for item in DB.child(collection).get().each()]
     keys = [key.lower() for key in data[0]['val'].keys()]
     return data, keys
 
 
-@app.route('/update', methods = ['POST', 'GET'])
+@app.route('/update', methods=['POST', 'GET'])
 def update():
-    print(request.args)
-    return returnData()
+    """
+    description
+    """
 
-@app.route('/onAppLoad')
-def onAppLoad():
+    print(request.args)
+    return return_data()
+
+
+@app.route('/on_app_load')
+def on_app_load():
+    """
+    description
+    """
+
     pass
 
 
