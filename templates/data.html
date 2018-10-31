@@ -38,7 +38,7 @@
 
     <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
         <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" onkeyup="search()" id="searchBox"aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>
@@ -51,7 +51,7 @@
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
         <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="data-table">
-            <table class="table">
+            <table class="table" id="dataTable">
                 <thead class="thead-light">
                     <tr>
                     {% for k in keys %}
@@ -63,11 +63,9 @@
                 {% for item in data %}
                     <tr>
                     {% for k in keys %}
-                        <td>
-                            <div class={{item["key"]}} data-toggle="modal" onclick="updateDiv('{{item["key"]}}', {{keys}})" data-target="#modalCenter">
+                        <td class={{item["key"]}} data-toggle="modal" onclick="updateDiv('{{item["key"]}}', {{keys}})" data-target="#modalCenter">
                             {{ item["val"][k] }}
-                            </div>
-                        </td>
+                         </td>
                     {% endfor %}
                     </tr>
                 {% endfor %}
@@ -102,6 +100,23 @@
             document.getElementById("modalData").innerHTML = innerHTML;
             document.getElementById("disabledInput").value = 'ID: ' + uniqueKey;
         }
+
+        function search() {
+            var filter = document.getElementById("searchBox").value.toUpperCase();
+            var tr = document.getElementById("dataTable").getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td");
+                for (j = 0; j < td.length; j++) {
+                    if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
     </script>
 
     <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
