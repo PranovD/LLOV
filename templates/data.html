@@ -39,7 +39,6 @@
     <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="text" placeholder="Search" onkeyup="search()" id="searchBox"aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>
 
@@ -76,16 +75,12 @@
 
     <script>
         function updateDiv(uniqueKey, keys) {
-            console.log(keys);
             var data = []
             $("." + uniqueKey).each(function() {
                 data.push($(this).text().trim());
             });
-            console.log(data);
-            console.log(data[1]);
-            console.log("hi");
-            var innerHTML = "<table class='table'>"
 
+            var innerHTML = "<table class='table'>"
             for (i = 0; i < keys.length; i++) {
                 innerHTML += "\
                     <tr>\
