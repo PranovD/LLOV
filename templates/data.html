@@ -48,31 +48,43 @@
         </div>
     {% endif %}
 
+    {% if getBalance %}
+        <div class="d-flex align-items-center p-3 my-3 rounded>
+	  <h1> Current Balance: {{ balance }} </h1>
+        </div>
+    {% endif %}
+
     <div class="my-3 p-3 bg-white rounded box-shadow">
         <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="data-table">
             <table class="table" id="dataTable">
                 <thead class="thead-light">
                     <tr>
-                    {% for k in keys %}
-                        <th scope="col">{{ k }}</th>
-                    {% endfor %}
+                    {% if get_keys %}
+                        {% for k in get_keys %}
+                            <th scope="col">{{ k }}</th>
+                        {% endfor %}
+                    {% endif %}
                     </tr>
                 </thead>
                 <tbody>
-                {% for item in data %}
-                    <tr>
-                    {% for k in keys %}
-                        <td class={{item["key"]}} data-toggle="modal" onclick="updateDiv('{{item["key"]}}', {{keys}})" data-target="#modalCenter">
-                            {{ item["val"][k] }}
-                         </td>
+
+                {% if data %}
+                    {% for item in data %}
+                        <tr>
+                        {% for k in keys %}
+                            <td class={{item["key"]}} data-toggle="modal" onclick="updateDiv('{{item["key"]}}', {{keys}})" data-target="#modalCenter">
+                                {{ item["val"][k] }}
+                             </td>
+                        {% endfor %}
+                        </tr>
                     {% endfor %}
-                    </tr>
-                {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
 
+	<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
     <script>
         function updateDiv(uniqueKey, keys) {
             var data = []
