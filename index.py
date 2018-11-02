@@ -331,28 +331,32 @@ def return_data():
     """
     description
     """
+
     get_balance = False
     get_data = None
     balance = None
     error = False
     error_data = ""
-    table = request.args.get('table')
     get_keys = keys.FIREBASE_KEYS
+    table = request.args.get('table')
+
+    if table is None:
+        table = "donations"
 
     if table == "donations":
         get_balance = True
 
-    try:
-        balance_response = CLIENT.Accounts.balance.get(ACCESS_TOKEN)
-        balance = json.dumps(balance_response, indent=2,
-                             sort_keys=True)
+        try:
+            balance_response = CLIENT.Accounts.balance.get(ACCESS_TOKEN)
+            balance = json.dumps(balance_response, indent=2,
+                                 sort_keys=True)
 
-    except plaid.errors.PlaidError as err:
-        error = True
-        error_data = jsonify({'error': {'display_message':
-                                        err.display_message,
-                                        'error_code': err.code,
-                                        'error_type': err.type}})
+        except plaid.errors.PlaidError as err:
+            error = True
+            error_data = jsonify({'error': {'display_message':
+                                            err.display_message,
+                                            'error_code': err.code,
+                                            'error_type': err.type}})
 
     if request.form.get('password') == DATA_CHANGE_KEY:
         id = request.form.get('id')[4:]
