@@ -12,6 +12,7 @@
     ('/data?table=volunteers', 'volunteers', 'Volunteers')
 ] -%}
 
+
 <div class="nav-scroller bg-white box-shadow">
     <nav class="nav nav-underline">
         {% for href, db, caption in navigation_bar %}
@@ -24,7 +25,6 @@
             href="{{ href|e }}">{{ caption|e }}</a>
         {% endfor %}
     </nav>
-
 </div>
 
 <main role="main" class="container">
@@ -49,8 +49,8 @@
     {% endif %}
 
     {% if getBalance %}
-        <div class="d-flex align-items-center p-3 my-3 rounded>
-	  <h1> Current Balance: {{ balance }} </h1>
+        <div class="d-flex align-items-center p-3 my-3 rounded">
+            <h1> Current Balance: {{ balance }} </h1>
         </div>
     {% endif %}
 
@@ -59,32 +59,65 @@
             <table class="table" id="dataTable">
                 <thead class="thead-light">
                     <tr>
-                    {% if get_keys %}
-                        {% for k in get_keys %}
-                            <th scope="col">{{ k }}</th>
-                        {% endfor %}
-                    {% endif %}
+                        {% if get_keys %}
+                            {% for k in get_keys %}
+                                <th scope="col">{{ k }}</th>
+                            {% endfor %}
+                        {% endif %}
                     </tr>
                 </thead>
-                <tbody>
 
-                {% if data %}
-                    {% for item in data %}
-                        <tr>
-                        {% for k in keys %}
-                            <td class={{item["key"]}} data-toggle="modal" onclick="updateDiv('{{item["key"]}}', {{keys}})" data-target="#modalCenter">
-                                {{ item["val"][k] }}
-                             </td>
+                <tbody>
+                    {% if data %}
+                        {% for item in data %}
+                            <tr>
+                                {% for k in keys %}
+                                    <td class={{item["key"]}} data-toggle="modal" onclick="updateDiv('{{item["key"]}}', {{keys}})" data-target="#modalCenter">
+                                        {{ item["val"][k] }}
+                                    </td>
+                                {% endfor %}
+                            </tr>
                         {% endfor %}
-                        </tr>
-                    {% endfor %}
-                {% endif %}
+                    {% endif %}
                 </tbody>
+
             </table>
         </div>
     </div>
 
-	<script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+
+    <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form action = "/data?table={{page}}" method = "POST">
+                    <div class="modal-header">
+                        <input class="form-control" id="disabledInput" type="text" name="id" readonly="readonly">
+
+                        <!-- <h5 class="modal-title" id="modalTitle"></h5> -->
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalData"></div>
+                    <div class="modal-footer">
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="password" class="form-control btn-block" name="password" id="inputPassword2" placeholder="Password">
+                            </div>
+                            <div class="col">
+                                <button type="submit" name="action" value="submit" class="btn btn-primary btn-block">Save</button>
+                            </div>
+                            <div class="col">
+                                <button type="submit" name="action" value="delete" class="btn btn-block btn-outline-danger">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
     <script>
         function updateDiv(uniqueKey, keys) {
             var data = []
@@ -123,40 +156,8 @@
                 }
             }
         }
-
     </script>
 
-    <div class="modal fade" id="modalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <form action = "/data?table={{page}}" method = "POST">
-                    <div class="modal-header">
-                        <input class="form-control" id="disabledInput" type="text" name="id" readonly="readonly">
-
-                        <!-- <h5 class="modal-title" id="modalTitle"></h5> -->
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="modalData"></div>
-                    <div class="modal-footer">
-                        <div class="form-row">
-                            <div class="col">
-                                <input type="password" class="form-control btn-block" name="password" id="inputPassword2" placeholder="Password">
-                            </div>
-                            <div class="col">
-                                <button type="submit" name="action" value="submit" class="btn btn-primary btn-block">Save</button>
-                            </div>
-                            <div class="col">
-                                <button type="submit" name="action" value="delete" class="btn btn-block btn-outline-danger">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </main>
-
 
 {% endblock %}
