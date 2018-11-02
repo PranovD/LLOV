@@ -119,6 +119,7 @@ def post_to_dog():
 
     error = False
     error_data = ""
+
     if request.method == 'POST':
         name = request.form.get('dogName')
         gender = request.form.get('gender')
@@ -161,6 +162,7 @@ def volunteers():
 
     error = False
     error_data = ""
+
     if request.method == 'POST':
         first_name = request.form.get('firstName')
         last_name = request.form.get('lastName')
@@ -247,6 +249,7 @@ def post_to_fosters():
 
     error = False
     error_data = ""
+
     if request.method == 'POST':
         first_name = request.form.get('firstName')
         last_name = request.form.get('lastName')
@@ -303,7 +306,7 @@ def postToDonation():
             error = True
             error_data = "All fields must be filled out."
 
-        else:
+        if not error:
             try:
                 amount = float(amount)
 
@@ -332,20 +335,17 @@ def return_data():
     description
     """
 
-    get_balance = False
     get_data = None
     balance = None
     error = False
     error_data = ""
-    get_keys = keys.FIREBASE_KEYS
+    get_keys = None
     table = request.args.get('table')
 
     if table is None:
         table = "donations"
 
     if table == "donations":
-        get_balance = True
-
         try:
             balance_response = CLIENT.Accounts.balance.get(ACCESS_TOKEN)
             balance = json.dumps(balance_response, indent=2,
@@ -357,6 +357,9 @@ def return_data():
                                             err.display_message,
                                             'error_code': err.code,
                                             'error_type': err.type}})
+
+    """
+    Account management actions like changing pwd should be in separate route
 
     if request.form.get('password') == DATA_CHANGE_KEY:
         id = request.form.get('id')[4:]
@@ -377,10 +380,12 @@ def return_data():
         else:
             error = True
             error_data = "Password is incorrect"
+    """
 
+    get_data, get_keys = data_from(table)
     return render_template('data.html', data=get_data, get_keys=get_keys,
                            page=table, error=error, error_data=error_data,
-                           get_balance=get_balance, balance=balance)
+                           balance=balance)
 
 
 def data_from(collection):
