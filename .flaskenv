@@ -1,1 +1,2 @@
-FLASK_APP=laskeys.py
+export FLASK_APP=laskeys
+export FLASK_ENV=development
