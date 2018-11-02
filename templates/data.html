@@ -71,8 +71,8 @@
                     {% if data %}
                         {% for item in data %}
                             <tr>
-                                {% for k in keys %}
-                                    <td class={{item["key"]}} data-toggle="modal" onclick="updateDiv('{{item["key"]}}', {{keys}})" data-target="#modalCenter">
+                                {% for k in get_keys %}
+                                    <td class={{ item["key"] }} data-toggle="modal" onclick="updateDiv('{{ item["key"] }}', {{ get_keys }})" data-target="#modalCenter">
                                         {{ item["val"][k] }}
                                     </td>
                                 {% endfor %}
@@ -98,6 +98,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    <!-- what is this for? If it's logging in, this should be in a separate template and jinja'd
                     <div class="modal-body" id="modalData"></div>
                     <div class="modal-footer">
                         <div class="form-row">
@@ -112,6 +113,7 @@
                             </div>
                         </div>
                     </div>
+                    -->
                 </form>
             </div>
         </div>
@@ -119,19 +121,19 @@
 
     <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
     <script>
-        function updateDiv(uniqueKey, keys) {
+        function updateDiv(uniqueKey, get_keys) {
             var data = []
             $("." + uniqueKey).each(function() {
                 data.push($(this).text().trim());
             });
 
             var innerHTML = "<table class='table'>"
-            for (i = 0; i < keys.length; i++) {
+            for (i = 0; i < get_keys.length; i++) {
                 innerHTML += "\
                     <tr>\
-                        <th scope='col'>" + keys[i] +  "</th>\
+                        <th scope='col'>" + get_keys[i] +  "</th>\
                         <td>\
-                            <input class='form-control' type='text' name='" + keys[i] + "'value='"+ data[i] +"'>\
+                            <input class='form-control' type='text' name='" + get_keys[i] + "'value='"+ data[i] +"'>\
                         </td>\
                     </tr>"
             }
