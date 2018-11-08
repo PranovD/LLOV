@@ -1,15 +1,28 @@
-from flask import render_template
-from app import app, db
+""" This module does blah blah blah """
+
+# from flask import jsonify
 
 
+class InvalidUsage(Exception):
+    """
+    description
+    """
+    status_code = 410
 
-# @app.errorhandler(404)
-# def not_found_error(error):
-#     return render_template('404.html'), 404
+    def __init__(self, message, status_code=None, payload=None):
+        """
+        description
+        """
+        Exception.__init__(self)
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
 
-@app.errorhandler(invalid_usage)
-def handle_invalid_usage(error):
-    response = jsonify(error.to_dict())
-    response.status_code = error.status_code
-    return response
-
+    def to_dict(self):
+        """
+        description
+        """
+        rv = dict(self.payload or ())
+        rv['message'] = self.message
+        return rv

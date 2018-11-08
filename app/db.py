@@ -1,12 +1,11 @@
 """ This module does blah blah blah """
 
 import pyrebase
+from . import errors
 
 try:
-    import keys
-    if keys.VERSION != "2.0":
-        print("Download newest version of keys.py from the Google Drive")
-except:
+    from . import keys
+except IOError:
     print("Keys File not Found. Online Access")
 
 
@@ -33,7 +32,57 @@ def add_foster_dog(data):
     """
     description
     """
+    for key, value in data:
+        if value is None:
+            raise errors.InvalidUsage('This view is gone', status_code=410)
+        else:
+            key = sanitize_user_input(key)
+            value = sanitize_user_input(value)
+
     DB.child("fosterdogs").push(data)
+
+
+def add_donation(data):
+    """
+    description
+    """
+
+    for key, value in data:
+        if value is None:
+            raise errors.InvalidUsage('This view is gone', status_code=410)
+        else:
+            key = sanitize_user_input(key)
+            value = sanitize_user_input(value)
+
+    DB.child("donations").push(data)
+
+
+def add_foster(data):
+    """
+    description
+    """
+    for key, value in data:
+        if value is None:
+            raise errors.InvalidUsage('This view is gone', status_code=410)
+        else:
+            key = sanitize_user_input(key)
+            value = sanitize_user_input(value)
+
+    DB.child("fosters").push(data)
+
+
+def add_volunteer(data):
+    """
+    description
+    """
+    for key, value in data:
+        if value is None:
+            raise errors.InvalidUsage('This view is gone', status_code=410)
+        else:
+            key = sanitize_user_input(key)
+            value = sanitize_user_input(value)
+
+    DB.child("volunteers").push(data)
 
 
 def sanitize_user_input(user_input):
