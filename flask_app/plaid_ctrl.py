@@ -2,7 +2,7 @@
 
 import plaid
 from flask import json
-from . import errors
+from flask_app import errors
 
 try:
     from . import keys
