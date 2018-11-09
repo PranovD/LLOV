@@ -1,6 +1,6 @@
 """ This module does blah blah blah """
 
-from app import app, DB
+# from app import app, DB
 import pyrebase
 # from . import errors
 #
@@ -18,15 +18,15 @@ import pyrebase
 # DB = FIREBASE.database()
 
 
-def data_from(collection):
-    """
-    description
-    """
-
-    donation_data = [{'key': item.key(), 'val': item.val()} for item in
-                     DB.child(collection).get().each()]
-    donation_keys = [key.lower() for key in donation_data[0]['val'].keys()]
-    return donation_data, donation_keys
+# def data_from(collection):
+#     """
+#     description
+#     """
+#
+#     donation_data = [{'key': item.key(), 'val': item.val()} for item in
+#                      DB.child(collection).get().each()]
+#     donation_keys = [key.lower() for key in donation_data[0]['val'].keys()]
+#     return donation_data, donation_keys
 #
 #
 # def add_foster_dog(data):
