@@ -1,9 +1,9 @@
 """ This module does blah blah blah """
 
-# import datetime
-# from flask import render_template, request
+import datetime
+from flask import render_template, request
 from flask_app import APP
-# from . import db, plaid_ctrl
+from flask_app import db, plaid_ctrl
 
 
 @APP.route('/')
