@@ -1,6 +1,15 @@
 {% extends "index.html" %}
 
 {% block content %}
+
+    {% if data['donations'] not None %}
+        {% set donation_data = {{ data['donations'] }} %}
+    {% endif %}
+
+    {% if data['events'] not None %}
+        {% set event_data = {{ data['event'] }} %}
+    {% endif %}
+
     <br>
     {# top overviews #}
 
@@ -32,8 +41,13 @@
                             <i class="fas fa-fw fa-list"></i>
                         </div>
 
-                        <div class="mr-5">Upcoming Event: {{ event_data[0]['val']['description'] }} <br>
-                            Event Date: {{ event_data[0]['val']['date'] }}
+                        <div class="mr-5">
+                            {% if event_data not None %}
+                                Upcoming Event: {{ event_data[0]['description'] }} <br>
+                                Event Date: {{ event_data[0]['date'] }}
+                            {% else %}
+                                There are no upcoming events
+                            {% endif %}
                         </div>
                     </div>
 
@@ -52,7 +66,15 @@
                         <div class="card-body-icon">
                             <i class="fas fa-fw fa-shopping-cart"></i>
                         </div>
-                        <div class="mr-5">Donations for this Month: ${{ donation_amount }}</div>
+
+                        <div class="mr-5">
+                            {% if donation_data not None %}
+                                <!-- later on, we need to write a function in db.py for calculating the total balance for the month by iterating over all donations within a time period -->
+                                Donations for this Month: ${{ donation_data[0]['amount'] }}</div>:w
+                            {% else %}
+                                There are no new donations this month
+                            {% endif %}
+                        </div>
                     </div>
 
                     <a class="card-footer text-white clearfix small z-1" href="/data?table=donations">
@@ -113,51 +135,71 @@
     </div>
 
     <script>
-        var ctx = document.getElementById("donationsChart").getContext('2d');
-        var donationsChart = new Chart(ctx, {
-            type: 'bar',
-            data: { labels : [{% for item in donation_dates %}
-                            "{{item}}",
-                            {% endfor %}],
-                    datasets: [{
-                        label: 'Donations',
-                        data : [{% for item in donation_amounts %}
-                                    {{item}},
-                                {% endfor %}],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)'
-                        ],
-                    borderWidth: 1
-                }]
-            },
+        {% if donation_data not None %}
+            {% set donation_dates =
+                {% for donation in donation_data %}
+                    {% set donation_dates[{{ donation.index }}] = {{ donation['date'] }} %}
+                {% endfor %}
+            %}
 
-            options: {
-                legend: {
-                    display: false
+            {% set donation_amounts =
+                {% for donation in donation_data %}
+                    {% set donation_amounts[{{ donation.index }}] = {{ donation['amount'] }} %}
+                {% endfor %}
+            %}
+
+            {% set donation_types_graph = {'Cash': 0, 'Check': 0, 'Venmo': 0, 'Cashapp': 0} %}
+            {% set donation_pie_labels = {{ donation_types_graph.keys() }} %}
+            {% set donation_pie_values = {{ donation_types_graph.values() }} %}
+
+
+
+            var ctx = document.getElementById("donationsChart").getContext('2d');
+            var donationsChart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels : [  {% for item in donation_dates %}
+                                        "{{item}}",
+                                    {% endfor %}],
+                        datasets: [{
+                            label: 'Donations',
+                            data : [{% for item in donation_amounts %}
+                                        {{item}},
+                                    {% endfor %}],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                        borderWidth: 1
+                    }]
                 },
 
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
+                options: {
+                    legend: {
+                        display: false
+                    },
+
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
                 }
-            }
-        });
+            });
+        {% endif %}
 
         var ctx = document.getElementById("donationsSourceChart").getContext('2d');
         var donationsSourceChart = new Chart(ctx, {

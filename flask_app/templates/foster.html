@@ -1,14 +1,8 @@
-{% extends "form_index.html" %}
+{% extends "index.html" %}
 
 {% block content %}
     <div class="row justify-content-center">
         <div class="col-md-6">
-            {% if error %}
-                <div class="alert alert-danger" role="alert">
-                    {{ errorData }}
-                </div>
-            {% endif %}
-
             <div class="card">
                 <header class="card-header">
                     <h4 class="card-title mt-2">Register to be a Foster</h4>
