@@ -2,10 +2,10 @@
 
 import plaid
 from flask import json
-from flask_app import errors
+from flask_app import errors, db
 
 try:
-    from . import keys
+    import keys
 except IOError:
     print("Keys File not Found. Online Access")
 
@@ -30,3 +30,9 @@ def get_plaid_data(request):
 
     except plaid.errors.PlaidError:
         raise errors.InvalidUsage('This view is gone', status_code=410)
+
+
+def get_plaid_donations(request):
+    """
+    description
+    """

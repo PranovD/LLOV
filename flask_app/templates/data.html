@@ -42,13 +42,7 @@
         </form>
     </div>
 
-    {% if error %}
-        <div class="d-flex align-items-center p-3 my-3 rounded box-shadow alert alert-danger" role="alert">
-          {{ errorData }}
-        </div>
-    {% endif %}
-
-    {% if getBalance %}
+    {% if balance %}
         <div class="d-flex align-items-center p-3 my-3 rounded">
             <h1> Current Balance: {{ balance }} </h1>
         </div>
@@ -68,8 +62,8 @@
                 </thead>
 
                 <tbody>
-                    {% if data %}
-                        {% for item in data %}
+                    {% if get_data and get_keys %}
+                        {% for item in get_data %}
                             <tr>
                                 {% for k in get_keys %}
                                     <td class={{ item["key"] }} data-toggle="modal" onclick="updateDiv('{{ item["key"] }}', {{ get_keys }})" data-target="#modalCenter">
@@ -127,15 +121,17 @@
                 data.push($(this).text().trim());
             });
 
-            var innerHTML = "<table class='table'>"
-            for (i = 0; i < get_keys.length; i++) {
-                innerHTML += "\
-                    <tr>\
-                        <th scope='col'>" + get_keys[i] +  "</th>\
-                        <td>\
-                            <input class='form-control' type='text' name='" + get_keys[i] + "'value='"+ data[i] +"'>\
-                        </td>\
-                    </tr>"
+            if (get_keys != null) {
+                var innerHTML = "<table class='table'>"
+                for (i = 0; i < get_keys.length; i++) {
+                    innerHTML += "\
+                        <tr>\
+                            <th scope='col'>" + get_keys[i] +  "</th>\
+                            <td>\
+                                <input class='form-control' type='text' name='" + get_keys[i] + "'value='"+ data[i] +"'>\
+                            </td>\
+                        </tr>"
+                }
             }
 
             innerHTML += "</tr></table>"
