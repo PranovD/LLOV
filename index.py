@@ -4,6 +4,8 @@ import os
 import datetime
 import plaid
 import pyrebase
+from mailchimp3 import MailChimp
+import pprint
 from flask import Flask, request, render_template, json, jsonify
 # import json
 # import flask_login
@@ -47,6 +49,8 @@ SERVICE_ACCOUNT = os.environ.get('SERVICE_ACCOUNT') \
 DATA_CHANGE_KEY = os.environ.get('DATA_CHANGE_KEY') \
     or keys.FIREBASE_KEYS['data_change_key']
 
+# MAILCHIMP KEYS
+MAILCHIMP_API_KEY = os.environ.get('MAILCHIMP_API_KEY') or keys.MAILCHIMP_API_KEYS['mailchimp_client_id']
 
 FIREBASE_CONFIG = {
     "apiKey": API_KEY,
@@ -63,6 +67,7 @@ FIREBASE = pyrebase.initialize_app(FIREBASE_CONFIG)
 AUTH = FIREBASE.auth()
 USER = AUTH.sign_in_with_email_and_password("tester@llov.com", "tester")
 DB = FIREBASE.database()
+MC_client = MailChimp(mc_api=MAILCHIMP_API_KEY)
 
 
 @app.route('/')
@@ -78,16 +83,21 @@ def index():
     donation_amounts = []
     donation_types_graph = {'Cash': 0, 'Check': 0, 'Venmo': 0, 'Cashapp': 0}
     for donation in donnation_data:
-        donation_amount += float(donation['val']['amount'])
-        date = donation['val']['timestamp'].split()
+        print (donation)
+        donation_amount += float(donation['val']['Amount'])
+        date = donation['val']['Date'].split()
         date = date[0].split('-')
         date = date[1] + '-' + date[2] + '-' + date[0]
         donation_dates.insert(0, date)
-        donation_amounts.insert(0, float(donation['val']['amount']))
-        donation_types_graph[donation['val']['source']] \
-            += float(donation['val']['amount'])
+        donation_amounts.insert(0, float(donation['val']['Amount']))
+        donation_types_graph[donation['val']['Source']] \
+            += float(donation['val']['Amount'])
     donation_dates, donation_amounts = zip(*sorted(zip(donation_dates,
                                                        donation_amounts)))
+
+    member_list = MC_client.lists.members.all('796717863d', get_all=True)
+    pprint.pprint(member_list)
+
     table = "events"
     event_data, event_keys = data_from(table)
     return render_template('main.html',
@@ -166,7 +176,7 @@ def volunteers():
     if request.method == 'POST':
         first_name = request.form.get('firstName')
         last_name = request.form.get('lastName')
-        # email = request.form.get('email')
+        email = request.form.get('email')
         street = request.form.get('street')
         city = request.form.get('city')
         state = request.form.get('state')
@@ -237,6 +247,23 @@ def volunteers():
 
         DB.child("volunteers").push(data)
 
+        tag_list = [{'id': 18321, 'name': 'Volunteer'}]
+        if fostering == 'on':
+            tag_list = [{'id': 18321, 'name': 'Volunteer'},
+                       {'id': 18325, 'name': 'Foster'}]
+
+        email = request.form.get('email')
+        print (email)
+        email = 'test_account_from_website@gmail.com'
+        MC_client.lists.members.create('796717863d', {
+            'email_address': email,
+            'status': 'subscribed',
+            'merge_fields': {
+                'FNAME': first_name,
+                'LNAME': last_name,
+            },
+        })
+
     return render_template('volunteer.html', page="Volunteers",
                            error=error, error_data=error_data)
 
@@ -280,6 +307,23 @@ def post_to_fosters():
             }
             DB.child("fosters").push(data)
 
+            tag_list = [{'id': 18325, 'name': 'Foster'}]
+            if fostering == 'on':
+                tag_list = [{'id': 18321, 'name': 'Volunteer'},
+                            {'id': 18325, 'name': 'Foster'}]
+
+            email = request.form.get('email')
+            print(email)
+            email = 'test_account_from_website@gmail.com'
+            MC_client.lists.members.create('796717863d', {
+                'email_address': email,
+                'status': 'subscribed',
+                'merge_fields': {
+                    'FNAME': first_name,
+                    'LNAME': last_name,
+                },
+            })
+
     return render_template('foster.html', page="Fosters", error=error,
                            error_data=error_data)
 
@@ -311,12 +355,12 @@ def postToDonation():
                 amount = float(amount)
 
                 data = {
-                    'first_name': first_name,
-                    'last_name': last_name,
-                    'amount': amount,
-                    'comments': comments,
-                    'source': source,
-                    'timestamp': str(datetime.datetime.now())
+                    'First_name': first_name,
+                    'Last_name': last_name,
+                    'Amount': amount,
+                    'Comments': comments,
+                    'Source': source,
+                    'Date': str(datetime.datetime.now())
                 }
 
                 DB.child("donations").push(data)
@@ -416,6 +460,93 @@ def on_app_load():
     """
 
     pass
+
+@app.route('/volunteeronboarding', methods=['POST', 'GET'])
+def volunteer_onboarding():
+    """
+    description
+    """
+
+    error = False
+    error_data = ""
+
+    if request.method == 'POST':
+        first_name = request.form.get('firstName')
+        last_name = request.form.get('lastName')
+        # email = request.form.get('email')
+        street = request.form.get('street')
+        city = request.form.get('city')
+        state = request.form.get('state')
+        zipcode = request.form.get('zipcode')
+        number = request.form.get('number')
+
+        # commitment
+        volunteering = request.form.get('volunteering')
+        fostering = request.form.get('fostering')
+        adopting = request.form.get('adopting')
+
+        # volunteering
+        longterm = request.form.get('long-term-foster')
+        shortterm = request.form.get('short-term-foster')
+        emergency = request.form.get('emergency-foster')
+        coord = request.form.get('coordinating')
+        flyers = request.form.get('putting-up-flyers')
+        dogwalking = request.form.get('dog-walking')
+        fundraising = request.form.get('fundraisers')
+        adoptions = request.form.get('helping-at-adoptions')
+        transporting = request.form.get('transporting')
+        vet = request.form.get('vet-appointments')
+        volunteering_other = request.form.get('volunteering-other')
+
+        # foster_requirements
+        female = request.form.get('female')
+        male = request.form.get('male')
+        small = request.form.get('small')
+        large = request.form.get('large')
+        breeds = request.form.get('breeds')
+        fostering_other = request.form.get('fostering-other')
+
+        data = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'street': street,
+            'city': city,
+            'state': state,
+            'zipcode': zipcode,
+            'phone_number': number,
+            'volunteering': {
+                'can_volunteer': volunteering,
+                'longterm': longterm,
+                'shortterm': shortterm,
+                'emergency': emergency,
+                'coord': coord,
+                'flyers': flyers,
+                'dogwalking': dogwalking,
+                'fundraising': fundraising,
+                'adoptions': adoptions,
+                'transporting': transporting,
+                'vet': vet,
+                'other': volunteering_other,
+            },
+            'adoption_fostering': {
+                'can_adopt': adopting,
+                'can_foster': fostering,
+                'dogTypes': {
+                    'female': female,
+                    'male': male,
+                    'small': small,
+                    'large': large,
+                    'breeds': breeds,
+                    'other': fostering_other
+                }
+            }
+        }
+
+        DB.child("volunteers").push(data)
+
+    return render_template('volunteer_onboarding.html', page="Volunteer Onboarding",
+                           error=error, error_data=error_data)
+
 
 
 if __name__ == '__main__':
