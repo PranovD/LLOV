@@ -1,4 +1,8 @@
-""" This module does blah blah blah """
+"""
+This module starts the application
+
+Sensitive file, edit at your own risk lol  - MA
+"""
 
 from flask import Flask
 
