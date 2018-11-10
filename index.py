@@ -254,7 +254,7 @@ def volunteers():
 
         email = request.form.get('email')
         print (email)
-        email = 'test_account_from_website@gmail.com'
+        email = 'temp_email@wokcy.com'
         MC_client.lists.members.create('796717863d', {
             'email_address': email,
             'status': 'subscribed',
