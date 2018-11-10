@@ -1,4 +1,9 @@
-""" This module does blah blah blah """
+"""
+If adding a new route, make sure it belongs here and wouldn't make more sense
+    in a controller. If you're making a call to Plaid or FB, a new route
+    probably belongs in one of the controllers
+    (not applicable if just renaming routes) - MA
+"""
 
 from flask import render_template, request
 from flask_app import APP
@@ -18,10 +23,12 @@ def dashboard():
 @APP.route('/login')
 def login():
     """
-    Going to move the notes below into separate authorization controller
+    description
+
+    Going to move the notes below into separate authorization controller - MA
     """
     """
-    Account management actions like changing pwd should be in separate route
+    Act management actions like changing pwd should be in separate route - MA
 
     if request.form.get('password') == DATA_CHANGE_KEY:
         id = request.form.get('id')[4:]
@@ -54,7 +61,7 @@ def post_dog():
 
     if request.method == 'POST':
         new_foster_dog_data = {}
-        # WTForms needed for this:
+        # WTForms needed for this: - MA
         # for field in form:
         #     new_foster_dog_data[field.name] = field.data
 
@@ -71,8 +78,8 @@ def post_volunteer():
 
     new_volunteer_data = {}
     # I want to convert listing the data manually like below
-    # to list data automatically like in this for loop:
-    # Need to implement WTForms for this
+    # to list data automatically like in this for loop: -MA
+    # Need to implement WTForms for this - MA
     # for field in form:
     #     new_volunteer_data[field.name] = field.data
 
@@ -124,8 +131,8 @@ def post_to_fosters():
 
     new_foster_data = {}
     # I want to convert listing the data manually like below
-    # to list data automatically like in this for loop:
-    # Need to implement WTForms for this
+    # to list data automatically like in this for loop: - MA
+    # Need to implement WTForms for this - MA
     # for field in form:
     #     new_foster_data[field.name] = field.data
 
@@ -154,8 +161,8 @@ def post_to_donation():
     if request.method == 'POST':
         new_donation_data = {}
         # I want to convert listing the data manually like below
-        # to list data automatically like in this for loop:
-        # Need to implement WTForms for this
+        # to list data automatically like in this for loop: - MA
+        # Need to implement WTForms for this - MA
         # for field in form:
         #     new_donation_data[field.name] = field.data
 
@@ -175,13 +182,16 @@ def post_to_donation():
 @APP.route('/data', methods=['POST', 'GET'])
 def return_data():
     """
+    description
+
     I like the modular aspect of this method in that it allows
         you to make a general request and depending on the
         contents of that request it will use a different specialized method
+        See notes on data_from() in db.py - MA
 
     However, this needs to be rewritten more cleanly and in the appropriate
         controller file. It also needs to be more descriptive.
-        Are you requesting data from Plaid API or Firebase?
+        Are you requesting data from Plaid API or Firebase? - MA
     """
 
     balance = None
@@ -202,7 +212,9 @@ def return_data():
 @APP.route('/update', methods=['POST', 'GET'])
 def update():
     """
-    Same as above method, needs to be more descriptive. What is being updated?
+    description
+
+    Same as above method, needs more description. Whats being updated? - MA
     """
     print(request.args)
     return return_data()
@@ -211,6 +223,8 @@ def update():
 @APP.route('/on_app_load')
 def on_app_load():
     """
-    See above ^
+    description
+
+    See above ^  - MA
     """
     pass
