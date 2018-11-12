@@ -53,8 +53,24 @@ def login():
     return render_template('login.html')
 
 
-@APP.route('/dog', methods=['GET', 'POST'])
-def post_dog():
+@APP.route('/forms', methods=['GET'])
+def get_forms():
+    """
+    description
+    """
+    return render_template('forms.html')
+
+
+@APP.route('/forms', methods=['POST'])
+def post_new_form():
+    """
+    description
+    """
+    return render_template('create_new_form.html')
+
+
+@APP.route('/forms/dog', methods=['GET', 'POST'])
+def dog_form():
     """
     description
     """
@@ -67,93 +83,95 @@ def post_dog():
 
         db.add_foster_dog(new_foster_dog_data)
 
-    return render_template('dog.html', page="Foster Dog")
+    return render_template('dog_intake_form.html', page="Foster Dog")
 
 
-@APP.route('/volunteer', methods=['POST'])
-def post_volunteer():
+@APP.route('/forms/volunteer', methods=['GET', 'POST'])
+def volunteer_form():
     """
     description
     """
 
-    new_volunteer_data = {}
-    # I want to convert listing the data manually like below
-    # to list data automatically like in this for loop: -MA
-    # Need to implement WTForms for this - MA
-    # for field in form:
-    #     new_volunteer_data[field.name] = field.data
+    if request.method == 'POST':
+        new_volunteer_data = {}
+        # I want to convert listing the data manually like below
+        # to list data automatically like in this for loop: -MA
+        # Need to implement WTForms for this - MA
+        # for field in form:
+        #     new_volunteer_data[field.name] = field.data
 
-    # data = {
-    #     'first_name': request.form.get('firstName'),
-    #     'last_name': request.form.get('lastName'),
-    #     'street': request.form.get('street'),
-    #     'city': request.form.get('city'),
-    #     'state': request.form.get('state'),
-    #     'zipcode': request.form.get('zipcode'),
-    #     'phone_number': request.form.get('number'),
-    #     'volunteering': {
-    #         'can_volunteer': request.form.get('volunteering'),
-    #         'longterm': request.form.get('long-term-foster'),
-    #         'shortterm': request.form.get('short-term-foster'),
-    #         'emergency': request.form.get('emergency-foster'),
-    #         'coord': request.form.get('coordinating'),
-    #         'flyers': request.form.get('putting-up-flyers'),
-    #         'dogwalking': request.form.get('dog-walking'),
-    #         'fundraising': request.form.get('fundraisers'),
-    #         'adoptions': request.form.get('helping-at-adoptions'),
-    #         'transporting': request.form.get('transporting'),
-    #         'vet': request.form.get('vet-appointments'),
-    #         'other': request.form.get('volunteering-other')
-    #     },
-    #     'adoption_fostering': {
-    #         'can_adopt': request.form.get('adopting'),
-    #         'can_foster': request.form.get('fostering'),
-    #         'dogTypes': {
-    #             'female': request.form.get('female'),
-    #             'male': request.form.get('male'),
-    #             'small': request.form.get('small'),
-    #             'large': request.form.get('large'),
-    #             'breeds': request.form.get('breeds'),
-    #             'other': request.form.get('fostering-other')
-    #         }
-    #     }
-    # }
+        # data = {
+        #     'first_name': request.form.get('firstName'),
+        #     'last_name': request.form.get('lastName'),
+        #     'street': request.form.get('street'),
+        #     'city': request.form.get('city'),
+        #     'state': request.form.get('state'),
+        #     'zipcode': request.form.get('zipcode'),
+        #     'phone_number': request.form.get('number'),
+        #     'volunteering': {
+        #         'can_volunteer': request.form.get('volunteering'),
+        #         'longterm': request.form.get('long-term-foster'),
+        #         'shortterm': request.form.get('short-term-foster'),
+        #         'emergency': request.form.get('emergency-foster'),
+        #         'coord': request.form.get('coordinating'),
+        #         'flyers': request.form.get('putting-up-flyers'),
+        #         'dogwalking': request.form.get('dog-walking'),
+        #         'fundraising': request.form.get('fundraisers'),
+        #         'adoptions': request.form.get('helping-at-adoptions'),
+        #         'transporting': request.form.get('transporting'),
+        #         'vet': request.form.get('vet-appointments'),
+        #         'other': request.form.get('volunteering-other')
+        #     },
+        #     'adoption_fostering': {
+        #         'can_adopt': request.form.get('adopting'),
+        #         'can_foster': request.form.get('fostering'),
+        #         'dogTypes': {
+        #             'female': request.form.get('female'),
+        #             'male': request.form.get('male'),
+        #             'small': request.form.get('small'),
+        #             'large': request.form.get('large'),
+        #             'breeds': request.form.get('breeds'),
+        #             'other': request.form.get('fostering-other')
+        #         }
+        #     }
+        # }
 
-    db.add_volunteer(new_volunteer_data)
-    return render_template('volunteer.html', page="Volunteers")
+        db.add_volunteer(new_volunteer_data)
+    return render_template('volunteer_intake_form.html', page="Volunteers")
 
 
-@APP.route('/foster', methods=['POST'])
-def post_to_fosters():
+@APP.route('/forms/foster', methods=['GET', 'POST'])
+def foster_form():
     """
     description
     """
 
-    new_foster_data = {}
-    # I want to convert listing the data manually like below
-    # to list data automatically like in this for loop: - MA
-    # Need to implement WTForms for this - MA
-    # for field in form:
-    #     new_foster_data[field.name] = field.data
+    if request.method == 'POST':
+        new_foster_data = {}
+        # I want to convert listing the data manually like below
+        # to list data automatically like in this for loop: - MA
+        # Need to implement WTForms for this - MA
+        # for field in form:
+        #     new_foster_data[field.name] = field.data
 
-    # data = {
-    #     'first_name': request.form.get('first_name'),
-    #     'last_name': request.form.get('last_name'),
-    #     'street': request.form.get('street'),
-    #     'city': request.form.get('city'),
-    #     'state': request.form.get('state'),
-    #     'zipcode': request.form.get('zipcode'),
-    #     'can_adopt_more': request.form.get('can_adopt_more'),
-    #     'comments': request.form.get('comments'),
-    #     'timestamp': str(datetime.datetime.now())
-    # }
+        # data = {
+        #     'first_name': request.form.get('first_name'),
+        #     'last_name': request.form.get('last_name'),
+        #     'street': request.form.get('street'),
+        #     'city': request.form.get('city'),
+        #     'state': request.form.get('state'),
+        #     'zipcode': request.form.get('zipcode'),
+        #     'can_adopt_more': request.form.get('can_adopt_more'),
+        #     'comments': request.form.get('comments'),
+        #     'timestamp': str(datetime.datetime.now())
+        # }
 
-    db.add_foster(new_foster_data)
-    return render_template('foster.html', page="Fosters")
+        db.add_foster(new_foster_data)
+    return render_template('foster_volunteer_intake_form.html', page="Fosters")
 
 
-@APP.route('/donation', methods=['GET', 'POST'])
-def post_to_donation():
+@APP.route('/forms/donation', methods=['GET', 'POST'])
+def donation_form():
     """
     description
     """
@@ -175,12 +193,11 @@ def post_to_donation():
         #     'timestamp': str(datetime.datetime.now())
         # }
         db.add_donation(new_donation_data)
-
-    return render_template('donation.html', page="Donations")
+    return render_template('new_donation_form.html', page="Donations")
 
 
 @APP.route('/data', methods=['POST', 'GET'])
-def return_data():
+def get_table_data():
     """
     description
 
@@ -192,21 +209,20 @@ def return_data():
     However, this needs to be rewritten more cleanly and in the appropriate
         controller file. It also needs to be more descriptive.
         Are you requesting data from Plaid API or Firebase? - MA
+
+    donations, foster volunteers, event volunteers, foster dogs
     """
 
-    balance = None
-    plaid_data = ""
-    table = request.args.get('table')
+    data = {}
+    table = db.sanitize_user_input(request.args.get('table'))
 
-    if table is None:
-        table = "donations"
+    if table == "donations" or table is None:
+        data = plaid_ctrl.get_plaid_data(request.args.get('request'))
 
-    if table == "donations":
-        plaid_data = plaid_ctrl.get_plaid_data(request.args.get('request'))
+    else:
+        data = db.data_from(table, "test")
 
-    get_data, get_keys = db.data_from(table, "test")
-    return render_template('data.html', data=get_data, get_keys=get_keys,
-                           page=table, balance=balance, plaid_data=plaid_data)
+    return render_template('table_data.html', data=data, page=table)
 
 
 @APP.route('/update', methods=['POST', 'GET'])
@@ -217,7 +233,7 @@ def update():
     Same as above method, needs more description. Whats being updated? - MA
     """
     print(request.args)
-    return return_data()
+    return get_table_data()
 
 
 @APP.route('/on_app_load')

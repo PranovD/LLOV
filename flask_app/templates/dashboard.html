@@ -2,13 +2,15 @@
 
 {% block content %}
 
-    {% if data['donations'] not None %}
-        {% set donation_data = {{ data['donations'] }} %}
+    {#
+    {% if data.donations not None %}
+        {% set donation_data = {{ data.donations }} %}
     {% endif %}
 
-    {% if data['events'] not None %}
-        {% set event_data = {{ data['event'] }} %}
+    {% if data.events not None %}
+        {% set event_data = {{ data.event }} %}
     {% endif %}
+    #}
 
     <br>
     {# top overviews #}
@@ -42,12 +44,14 @@
                         </div>
 
                         <div class="mr-5">
+                            {#
                             {% if event_data not None %}
-                                Upcoming Event: {{ event_data[0]['description'] }} <br>
-                                Event Date: {{ event_data[0]['date'] }}
+                                Upcoming Event: {{ event_data.description }} <br>
+                                Event Date: {{ event_data.date }}
                             {% else %}
                                 There are no upcoming events
                             {% endif %}
+                            #}
                         </div>
                     </div>
 
@@ -68,12 +72,14 @@
                         </div>
 
                         <div class="mr-5">
+                            {#
                             {% if donation_data not None %}
-                                <!-- later on, we need to write a function in db.py for calculating the total balance for the month by iterating over all donations within a time period -->
-                                Donations for this Month: ${{ donation_data[0]['amount'] }}</div>:w
+                                <!-- later on, we need to write a function in db.py for calculating the total balance for the month by iterating over all donations within a time period - MA -->
+                                Donations for this Month: ${{ donation_data.amount }}</div>
                             {% else %}
                                 There are no new donations this month
                             {% endif %}
+                            #}
                         </div>
                     </div>
 
@@ -135,35 +141,35 @@
     </div>
 
     <script>
-        {% if donation_data not None %}
+        {% if data %}
+        {#
             {% set donation_dates =
                 {% for donation in donation_data %}
-                    {% set donation_dates[{{ donation.index }}] = {{ donation['date'] }} %}
+                    {% set donation_dates[{{ donation.index }}] = {{ donation.date }} %}
                 {% endfor %}
             %}
 
             {% set donation_amounts =
                 {% for donation in donation_data %}
-                    {% set donation_amounts[{{ donation.index }}] = {{ donation['amount'] }} %}
+                    {% set donation_amounts[{{ donation.index }}] = {{ donation.amount }} %}
                 {% endfor %}
             %}
 
             {% set donation_types_graph = {'Cash': 0, 'Check': 0, 'Venmo': 0, 'Cashapp': 0} %}
             {% set donation_pie_labels = {{ donation_types_graph.keys() }} %}
             {% set donation_pie_values = {{ donation_types_graph.values() }} %}
-
-
+            #}
 
             var ctx = document.getElementById("donationsChart").getContext('2d');
             var donationsChart = new Chart(ctx, {
                 type: 'bar',
                 data: { labels : [  {% for item in donation_dates %}
-                                        "{{item}}",
+                                        "{{ item }}",
                                     {% endfor %}],
                         datasets: [{
                             label: 'Donations',
                             data : [{% for item in donation_amounts %}
-                                        {{item}},
+                                        {{ item }},
                                     {% endfor %}],
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
@@ -207,12 +213,12 @@
             data:
                 {
                 labels : [{% for item in donation_pie_labels %}
-                                "{{item}}",
+                                "{{ item }}",
                           {% endfor %}],
                 datasets: [{
                     label: 'Donation Amount',
                     data : [{% for item in donation_pie_values %}
-                                {{item}},
+                                {{ item }},
                             {% endfor %}],
 
                     backgroundColor: [
