@@ -26,4 +26,3 @@ requests-toolbelt==0.7.0
 requests==2.13.0
 rsa==3.4.2
 six==1.11.0
-wsgiref==0.1.2
