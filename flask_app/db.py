@@ -1,7 +1,7 @@
 """ PLEASE DON'T CHANGE LINES 1-16 - MA """
 
 import pyrebase
-from flask_app import errors
+from flask_app import errors, mc_ctrl
 
 try:
     import keys
@@ -50,6 +50,7 @@ def get_dashboard_data():
     data = {}
     data['events'] = get_events()
     data['donations'] = get_donations()
+    data['members'] = mc_ctrl.get_members()
 
     return data
 
