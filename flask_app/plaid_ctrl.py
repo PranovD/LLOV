@@ -17,7 +17,7 @@ PLAID_CLIENT = plaid.Client(keys.PLAID_API_KEYS['plaid_client_id'],
 # PLAID_ACCESS_TOKEN = keys.PLAID_API_KEYS["plaid_access_token"]
 
 
-def get_plaid_data(request):
+def get_plaid_data():
     """
     description
     """

@@ -16,8 +16,12 @@ def dashboard():
     """
     description
     """
-    data = db.get_dashboard_data()
-    return render_template('dashboard.html', page="Dash", data=data)
+    event_data = db.get_firebase_collection("events")
+    donation_data = db.get_firebase_collection("donations")
+
+    return render_template('dashboard.html', page="Dash",
+                           event_data=event_data,
+                           donation_data=donation_data)
 
 
 @APP.route('/login')
@@ -81,7 +85,7 @@ def dog_form():
         # for field in form:
         #     new_foster_dog_data[field.name] = field.data
 
-        db.add_foster_dog(new_foster_dog_data)
+        db.add_firebase_document("fosters", new_foster_dog_data)
 
     return render_template('dog_intake_form.html', page="Foster Dog")
 
@@ -136,7 +140,7 @@ def volunteer_form():
         #     }
         # }
 
-        db.add_volunteer(new_volunteer_data)
+        db.add_firebase_document("volunteers", new_volunteer_data)
     return render_template('volunteer_intake_form.html', page="Volunteers")
 
 
@@ -166,7 +170,7 @@ def foster_form():
         #     'timestamp': str(datetime.datetime.now())
         # }
 
-        db.add_foster(new_foster_data)
+        db.add_firebase_document("fosters", new_foster_data)
     return render_template('foster_volunteer_intake_form.html', page="Fosters")
 
 
@@ -192,37 +196,26 @@ def donation_form():
         #     'source': request.form.get('source'),
         #     'timestamp': str(datetime.datetime.now())
         # }
-        db.add_donation(new_donation_data)
+        db.add_firebase_document("donations", new_donation_data)
     return render_template('new_donation_form.html', page="Donations")
 
 
 @APP.route('/data', methods=['POST', 'GET'])
 def get_table_data():
     """
-    description
-
-    I like the modular aspect of this method in that it allows
-        you to make a general request and depending on the
-        contents of that request it will use a different specialized method
-        See notes on data_from() in db.py - MA
-
-    However, this needs to be rewritten more cleanly and in the appropriate
-        controller file. It also needs to be more descriptive.
-        Are you requesting data from Plaid API or Firebase? - MA
-
-    donations, foster volunteers, event volunteers, foster dogs
+    Description
     """
 
-    data = {}
-    table = db.sanitize_user_input(request.args.get('table'))
+    documents_data = {}
+    collection = db.sanitize_user_input(request.args.get('table'))
 
-    if table == "donations" or table is None:
-        data = plaid_ctrl.get_plaid_data(request.args.get('request'))
+    if collection is None:
+        collection = "donations"
 
-    else:
-        data = db.data_from(table, "test")
-
-    return render_template('table_data.html', data=data, page=table)
+    documents_data = db.get_firebase_collection(collection)
+    return render_template('table_data.html',
+                           data=documents_data,
+                           page=collection)
 
 
 @APP.route('/update', methods=['POST', 'GET'])
@@ -232,8 +225,8 @@ def update():
 
     Same as above method, needs more description. Whats being updated? - MA
     """
-    print(request.args)
-    return get_table_data()
+    collection = db.sanitize_user_input(request.args.get('table'))
+    return db.get_firebase_collection(collection)
 
 
 @APP.route('/on_app_load')
