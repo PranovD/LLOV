@@ -1,9 +1,9 @@
 # LLOV
 
-Check Python installation = 3
+Check Python3 installation
     python -v
 
-Check pip version = pip3
+Check pip3 installation
     pip -V
 
 Create virtual env
@@ -22,7 +22,7 @@ run application
 
 
 Common Errors
-Plaid Errors
+    Plaid Errors
     NameError: name 'plaid' is not defined
     AttributeError: module 'plaid' has no attribute 'Client'
 
