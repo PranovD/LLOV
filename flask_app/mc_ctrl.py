@@ -4,13 +4,13 @@ from mailchimp3 import MailChimp
 import pprint
 
 try:
-    import keys
+    from keys import MAILCHIMP_API_KEY
 except IOError:
     print("Keys File not Found. Online Access")
 
 # MAILCHIMP KEYS
-MC_CLIENT = MailChimp(mc_api=keys.MAILCHIMP_API_KEY["mailchimp_client_id"],
-                      mc_user=keys.MAILCHIMP_API_KEY["mailchimp_username"])
+MC_CLIENT = MailChimp(mc_api=MAILCHIMP_API_KEY["mailchimp_client_id"],
+                      mc_user=MAILCHIMP_API_KEY["mailchimp_username"])
 
 
 def get_volunteer_emails():

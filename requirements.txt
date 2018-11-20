@@ -1,5 +1,7 @@
 Flask==0.12.1
+Flask-WTF>=0.14.2
 Jinja2==2.10
+WTForms>=2.2.1
 MarkupSafe==1.0
 Pyrebase==3.0.27
 Werkzeug==0.14.1

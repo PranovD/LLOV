@@ -7,7 +7,7 @@ If adding a new route, make sure it belongs here and wouldn't make more sense
 
 from flask import render_template, request
 from flask_app import APP
-from flask_app import plaid_ctrl, db
+from flask_app import plaid_ctrl, db, errors, forms_ctrl
 
 
 @APP.route('/')
@@ -73,21 +73,39 @@ def post_new_form():
     return render_template('create_new_form.html')
 
 
-@APP.route('/forms/dog', methods=['GET', 'POST'])
-def dog_form():
+@APP.route('/forms/<form>', methods=['GET', 'POST'])
+def display_form(form):
     """
     description
     """
+    clean_form = db.sanitize_user_input(form)
 
-    if request.method == 'POST':
-        new_foster_dog_data = {}
-        # WTForms needed for this: - MA
-        # for field in form:
-        #     new_foster_dog_data[field.name] = field.data
+    form_object = forms_ctrl.create_form_object(clean_form)
+    # if form_object.validate_on_submit():
 
-        db.add_firebase_document("fosters", new_foster_dog_data)
+    return render_template('form_base.html', page=clean_form,
+                           forms=forms_ctrl.WHITE_LISTED_FORMS,
+                           form=form_object)
 
-    return render_template('dog_intake_form.html', page="Foster Dog")
+
+# @APP.route('/forms/<form>', methods=['GET', 'POST'])
+# def display_form(form):
+#     """
+#     description
+#     """
+#     if form not in white_listed_forms:
+#         raise errors.InvalidUsage("We are currently not storing \
+#                                   this data.", status_code=410)
+#     else:
+#         if request.method == 'POST':
+#             new_data = {}
+#             # WTForms needed for this: - MA
+#             # for field in form:
+#             #     new_foster_dog_data[field.name] = field.data
+#
+#             db.add_firebase_document(form, new_data)
+#
+#     return render_template('<form>_form.html', page="<form>")
 
 
 @APP.route('/forms/volunteer', methods=['GET', 'POST'])
