@@ -81,11 +81,12 @@ def display_form(form):
     clean_form = db.sanitize_user_input(form)
 
     form_object = forms_ctrl.create_form_object(clean_form)
+    html_form_type = forms_ctrl.get_html_form_type(clean_form)
     # if form_object.validate_on_submit():
 
     return render_template('form_base.html', page=clean_form,
-                           forms=forms_ctrl.WHITE_LISTED_FORMS,
-                           form=form_object)
+                           form=form_object,
+                           specific_form_html=html_form_type)
 
 
 # @APP.route('/forms/<form>', methods=['GET', 'POST'])

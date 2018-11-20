@@ -42,19 +42,37 @@ class FosterVolunteerIntakeForm(FlaskForm):
 
 
 class DonationForm(FlaskForm):
+    """
+    description
+    """
     name = StringField('Name', validators=[DataRequired()])
     amount = IntegerField("Amount")
 
 
-WHITE_LISTED_FORMS = {"Dogs": DogIntakeForm,
-                      "Person": VolunteerIntakeForm,
-                      "donations": DonationForm
+WHITE_LISTED_FORMS = {"Dogs": [DogIntakeForm, "dog_intake_form.html"],
+                      "Person": [VolunteerIntakeForm,
+                                 "volunteer_intake_form.html"],
+                      "donations": [DonationForm, "donation_form.html"]
                       }
 
+
 def create_form_object(form):
+    """
+    description
+    """
     if form not in WHITE_LISTED_FORMS:
         raise errors.InvalidUsage("We are currently not storing \
                                   this data.", status_code=410)
-    return WHITE_LISTED_FORMS[form]()
+    return WHITE_LISTED_FORMS[form][0]()
+
+
+def get_html_form_type(form):
+    """
+    description
+    """
+    if form not in WHITE_LISTED_FORMS:
+        raise errors.InvalidUsage("We are currently not storing \
+                                  this data.", status_code=410)
+    return WHITE_LISTED_FORMS[form][1]
 
 
