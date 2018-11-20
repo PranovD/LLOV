@@ -4,11 +4,11 @@ import pyrebase
 from flask_app import errors, mc_ctrl
 
 try:
-    import keys
+    from keys import FIREBASE_KEYS
 except IOError:
     print("Keys File not Found. Online Access")
 
-FIREBASE = pyrebase.initialize_app(keys.FIREBASE_KEYS)
+FIREBASE = pyrebase.initialize_app(FIREBASE_KEYS)
 FIREBASE_AUTH = FIREBASE.auth()
 FIREBASE_USER = FIREBASE_AUTH.sign_in_with_email_and_password(
                                                              "tester@llov.com",
@@ -24,7 +24,6 @@ def get_firebase_collection(collection):
     """
 
     if collection not in white_listed_collections:
-        print(collection)
         raise errors.InvalidUsage("We are currently not storing \
                                   this data.", status_code=410)
     return DB.child(collection).get().val()

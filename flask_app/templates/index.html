@@ -19,7 +19,7 @@
 {% block body %}
     <body class="bg-light">
         <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">LLOV</a>
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">LLOV</a>
 
             <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
                 <span class="navbar-toggler-icon"></span>
@@ -28,19 +28,19 @@
             <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/data">Data</a>
+                        <a class="nav-link" href="{{ url_for('get_table_data') }}">Data</a>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="{{ url_for('get_forms') }}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Forms
                         </a>
 
+                        {% set forms = ["Dogs", "Person", "donations", "events"] %}
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" target="_blank" href="/forms/dog">Dogs</a>
-                            <a class="dropdown-item" target="_blank" href="/forms/foster">Fosters</a>
-                            <a class="dropdown-item" target="_blank" href="/forms/donation">Donations</a>
-                            <a class="dropdown-item" target="_blank" href="/forms/volunteer">Volunteers</a>
+                            {% for form in forms %}
+                            <a class="dropdown-item" target="_blank" href="{{ url_for('display_form', form=form) }}">{{ form }}</a>
+                            {% endfor %}
                         </div>
                     </li>
                 </ul>
