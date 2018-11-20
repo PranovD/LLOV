@@ -36,7 +36,7 @@
                             Forms
                         </a>
 
-                        {% set forms = ["Dogs", "Person", "donations", "events"] %}
+                        {% set forms = ["Dogs", "Person", "donations"] %}
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% for form in forms %}
                             <a class="dropdown-item" target="_blank" href="{{ url_for('display_form', form=form) }}">{{ form }}</a>

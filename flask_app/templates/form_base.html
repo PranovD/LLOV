@@ -10,7 +10,7 @@
 
                 <article class="card-body">
                     {% block form_content %}
-                        {% include forms[page] %}
+                        {% include specific_form_html %}
                         {{ form.hidden_tag() }}
                     {% endblock %}
                 </article>
