@@ -7,7 +7,8 @@ If adding a new route, make sure it belongs here and wouldn't make more sense
 
 from flask import render_template, request
 from flask_app import APP
-from flask_app import plaid_ctrl, db, errors, forms_ctrl
+from flask_app import plaid_ctrl, db, errors
+# from forms_ctrl import WHITELISTED_FORMS
 
 
 @APP.route('/')
@@ -62,7 +63,8 @@ def get_forms():
     """
     description
     """
-    return render_template('forms.html')
+    white_listed_forms = db.get_firebase_collection("forms")
+    return render_template('forms.html', forms=white_listed_forms)
 
 
 @APP.route('/forms', methods=['POST'])

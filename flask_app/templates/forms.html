@@ -1,9 +1,8 @@
 {% extends "index.html" %}
 
     {% block content %}
-        {% for form in forms %}
-
-        <a href="{{ url_for('display_forms', form= form) }}">{{ form }} Forms</a>
-
+        {% for key, value in forms.items() %}
+            <br>
+            <a href={{ value }}>{{ key }}</a>
         {% endfor %}
     {% endblock %}
