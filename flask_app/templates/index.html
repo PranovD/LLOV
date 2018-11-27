@@ -31,17 +31,8 @@
                         <a class="nav-link" href="{{ url_for('get_table_data') }}">Data</a>
                     </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="{{ url_for('get_forms') }}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Forms
-                        </a>
-
-                        {% set forms = ["Dogs", "Person", "donations"] %}
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            {% for form in forms %}
-                            <a class="dropdown-item" target="_blank" href="{{ url_for('display_form', form=form) }}">{{ form }}</a>
-                            {% endfor %}
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('get_forms') }}">Forms</a>
                     </li>
                 </ul>
             </div>
