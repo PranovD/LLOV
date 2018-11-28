@@ -64,7 +64,8 @@ def get_forms():
     description
     """
     white_listed_forms = db.get_firebase_collection("forms")
-    return render_template('forms.html', forms=white_listed_forms)
+    return render_template('forms.html',
+                           forms=white_listed_forms)
 
 
 @APP.route('/forms', methods=['POST'])
