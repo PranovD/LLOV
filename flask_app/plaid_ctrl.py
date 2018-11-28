@@ -49,8 +49,8 @@ def get_access_token(public_token):
     """
     global access_token
     exchange_response = client.Item.public_token.exchange(public_token)
-    # print(exchange_response)
-    with open('financial.csv', mode='a') as csv_file:
+    print(exchange_response)
+    with open('financial.csv', 'a+') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
         writer.writerow([exchange_response['access_token'],
                          exchange_response['item_id'],
