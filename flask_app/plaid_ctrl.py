@@ -9,13 +9,16 @@ try:
 except IOError:
     print("Keys File not Found. Online Access")
 
-PLAID_CLIENT = plaid.Client(PLAID_API_KEYS['plaid_client_id'],
+client = plaid.Client(PLAID_API_KEYS['plaid_client_id'],
                             PLAID_API_KEYS["plaid_secret"],
                             PLAID_API_KEYS["plaid_public_key"],
                             PLAID_API_KEYS["plaid_env"])
 
 # PLAID_ACCESS_TOKEN = PLAID_API_KEYS["plaid_access_token"]
 
+
+access_token = None
+public_token = None
 
 def get_plaid_data():
     """
@@ -36,3 +39,12 @@ def get_plaid_donations(request):
     """
     description
     """
+
+def get_access_token(public_token):
+    global access_token
+    exchange_response = client.Item.public_token.exchange(public_token)
+    print('access token: ' + exchange_response['access_token'])
+    print('item ID: ' + exchange_response['item_id'])
+    print(exchange_response)
+
+    return exchange_response

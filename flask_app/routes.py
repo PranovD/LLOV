@@ -9,8 +9,18 @@ from flask import render_template, request
 from flask_app import APP
 from flask_app import plaid_ctrl, db, errors, forms_ctrl
 
+try:
+    from keys import PLAID_API_KEYS
+except IOError:
+    print("Keys File not Found. Online Access")
+
 
 @APP.route('/')
+
+
+
+
+
 @APP.route('/dashboard')
 def dashboard():
     """
@@ -21,7 +31,9 @@ def dashboard():
 
     return render_template('dashboard.html', page="Dash",
                            event_data=event_data,
-                           donation_data=donation_data)
+                           donation_data=donation_data,
+                           plaid_public_key=PLAID_API_KEYS["plaid_public_key"])
+
 
 
 @APP.route('/login')
@@ -55,6 +67,18 @@ def login():
             error_data = "Password is incorrect"
     """
     return render_template('login.html')
+
+
+@APP.route("/get_access_token", methods=['POST'])
+def get_access_token():
+    print("get_access_token route")
+    
+
+    plaid_access_token = plaid_ctrl.get_access_token(request.form['public_token'])
+    # return render_template('dashboard.html', page="Dash",
+    #                        event_data=event_data,
+    #                        donation_data=donation_data)
+    return "Something"
 
 
 @APP.route('/forms', methods=['GET'])
