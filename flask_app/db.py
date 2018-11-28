@@ -14,7 +14,7 @@ FIREBASE_USER = FIREBASE_AUTH.sign_in_with_email_and_password(
                                                              "tester@llov.com",
                                                              "tester")
 DB = FIREBASE.database()
-white_listed_collections = ["Dogs", "Person", "donations", "events"]
+white_listed_collections = ["Dogs", "Person", "donations", "events", "forms"]
 
 
 def get_firebase_collection(collection):

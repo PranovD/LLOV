@@ -1,8 +1,36 @@
 {% extends "index.html" %}
 
-    {% block content %}
-        {% for key, value in forms.items() %}
+{% block content %}
+        {% for form in forms.items() %}
             <br>
-            <a href={{ value }}>{{ key }}</a>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <p> {{ form[1]['form_name'] }} Form </p>
+
+                    <form class="external_forms" id={{ form[1]['form_name'] }}>
+                        <input type="text" class="form_link_class" id="form_link_{{ form[1]['form_name'] }}" value="test" disabled='disabled'>
+
+                        <button type="button" class="btn btn-default edit_btn" id="edit_btn_{{ form[1]['form_name'] }}"
+                            style="display:block"
+                            onclick=
+                               "this.style.display='none';
+                                document.getElementById('save_btn_' + '{{ form[1]['form_name'] }}').style.display='block';
+                                document.getElementById('form_link_' + '{{ form[1]['form_name'] }}').disabled=false;"
+                        >
+                            Edit
+                        </button>
+
+                        <button type="button" class="btn btn-default save_btn" id="save_btn_{{ form[1]['form_name'] }}" style="display:none"
+                            onclick=
+                               "this.style.display='none';
+                                document.getElementById('edit_btn_' + '{{ form[1]['form_name'] }}').style.display='block';
+                                document.getElementById('form_link_' + '{{ form[1]['form_name'] }}').disabled=true;"
+                        >
+                            Save
+                        </button>
+                    </form>
+                    {# <a href="#" id="form_link" data-type="text" data-pk={{ form[0] }} data-url="/update_form_link" data-title="Edit Form Link">{{ form[1]['form_link'] }}</a> #}
+                </li>
+            </ul>
         {% endfor %}
-    {% endblock %}
+{% endblock %}
