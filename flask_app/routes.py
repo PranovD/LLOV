@@ -7,7 +7,7 @@ If adding a new route, make sure it belongs here and wouldn't make more sense
 
 from flask import render_template, request
 from flask_app import APP
-from flask_app import plaid_ctrl, db, errors, forms_ctrl
+from flask_app import plaid_ctrl, db, errors, forms_ctrl, error_handlers
 
 try:
     from keys import PLAID_API_KEYS
@@ -16,11 +16,6 @@ except IOError:
 
 
 @APP.route('/')
-
-
-
-
-
 @APP.route('/dashboard')
 def dashboard():
     """
@@ -72,7 +67,7 @@ def login():
 @APP.route("/get_access_token", methods=['POST'])
 def get_access_token():
     print("get_access_token route")
-    
+
 
     plaid_access_token = plaid_ctrl.get_access_token(request.form['public_token'])
     # return render_template('dashboard.html', page="Dash",

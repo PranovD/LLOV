@@ -6,7 +6,7 @@ from flask_app import errors
 
 
 @APP.errorhandler(404)
-def not_found_error():
+def not_found_error(e):
     """
     description
     """
