@@ -1,4 +1,5 @@
 keys.py
+tokens.py
 llov-5592a-firebase-adminsdk-yt75r-85c36e2ac6.json
 venv
 
@@ -12,6 +13,10 @@ venv
 *.so
 *.pyc
 *.swp
+
+# Local Data Storage #
+######################
+*.csv
 
 # Packages #
 ############

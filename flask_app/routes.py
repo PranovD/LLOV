@@ -5,10 +5,15 @@ If adding a new route, make sure it belongs here and wouldn't make more sense
     (not applicable if just renaming routes) - MA
 """
 
+import plaid
 from flask import render_template, request
 from flask_app import APP
-from flask_app import plaid_ctrl, db, errors
-# from forms_ctrl import WHITELISTED_FORMS
+from flask_app import plaid_ctrl, db, errors, error_handlers
+
+try:
+    from keys import PLAID_API_KEYS
+except IOError:
+    print("Keys File not Found. Online Access")
 
 
 @APP.route('/')
@@ -22,7 +27,8 @@ def dashboard():
 
     return render_template('dashboard.html', page="Dash",
                            event_data=event_data,
-                           donation_data=donation_data)
+                           donation_data=donation_data,
+                           plaid_public_key=PLAID_API_KEYS["plaid_public_key"])
 
 
 @APP.route('/login')
@@ -81,6 +87,24 @@ def edit_form_link():
     db.update_firebase_document("forms", form_id, updated_form_data)
 
     return get_forms()
+
+
+@APP.route("/get_access_token", methods=['POST'])
+def get_access_token():
+    """
+    public_token = None
+    access_token = plaid_ctrl.get_access_token(public_token)
+    return access_token
+    """
+
+    # print("get_access_token route")
+
+    plaid_access_token = plaid_ctrl.get_access_token(
+        request.form['public_token'])
+    # return render_template('dashboard.html', page="Dash",
+    #                        event_data=event_data,
+    #                        donation_data=donation_data)
+    return "Something"
 
 
 @APP.route('/data', methods=['POST', 'GET'])
