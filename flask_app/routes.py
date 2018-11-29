@@ -5,8 +5,7 @@ If adding a new route, make sure it belongs here and wouldn't make more sense
     (not applicable if just renaming routes) - MA
 """
 
-import plaid
-from flask import render_template, request
+from flask import render_template, request, abort
 from flask_app import APP
 from flask_app import plaid_ctrl, db, errors, error_handlers
 
@@ -14,7 +13,6 @@ try:
     from keys import PLAID_API_KEYS
 except IOError:
     print("Keys File not Found. Online Access")
-
 
 @APP.route('/')
 @APP.route('/dashboard')

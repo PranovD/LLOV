@@ -2,7 +2,6 @@
 
 # from flask import jsonify
 
-
 class InvalidUsage(Exception):
     """
     description
