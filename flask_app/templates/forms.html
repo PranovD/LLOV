@@ -5,43 +5,60 @@
             <br>
             <ul class="list-group">
                 <li class="list-group-item">
-                    <p> {{ form[1]['form_name'] }} Form </p>
+                    <div class="row">
+                        <div class="mx-auto">
+                            <a href="{{ form[1]['form_link'] }}" class="btn btn-primary" id="{{ form[1]['form_name'] }}_btn">
+                                {{ form[1]['form_name'] }} Form
+                            </a>
+                        </div>
+                    </div>
 
-                    <form action="{{ url_for('edit_form_link') }}" method="post">
-                        <input type="text" id="form_link_{{ form[1]['form_name'] }}" disabled='disabled' name="form_link" value="{{ form[1]['form_link'] }}">
+                    <form action="{{ url_for('edit_form_link') }}" method="post" class="mx-auto">
                         <input type="hidden" name="form_id" value="{{ form[0] }}">
                         <input type="hidden" name="form_name" value="{{ form[1]['form_name'] }}">
-
                         <input type="hidden" id="new_form_link_{{ form[1]['form_name'] }}" name="new_form_link">
 
-                        <button type="button" class="btn btn-default" id="edit_btn_{{ form[1]['form_name'] }}"
-                            style="display:block"
-                            onclick=
-                               "this.style.display='none';
-                                var save_btn = document.getElementById('save_btn_' + '{{ form[1]['form_name'] }}');
-                                var form_link = document.getElementById('form_link_' + '{{ form[1]['form_name'] }}');
+                        <br>
+                        <div class="row">
+                            <div class="col-md-5 mx-auto">
+                                <div class="col-md-5">
+                                        <div class="col-md-6 pull-left">
+                                            <input type="text" id="form_link_{{ form[1]['form_name'] }}" disabled='disabled' name="form_link" value="{{ form[1]['form_link'] }}">
+                                        </div>
 
-                                save_btn.style.display='block';
-                                form_link.disabled=false;"
-                        >
-                            Edit
-                        </button>
+                                        <div class="col-md-6 pull-right">
+                                            <button type="button" class="btn btn-default" id="edit_btn_{{ form[1]['form_name'] }}"
+                                                style="display:block"
+                                                onclick=
+                                                   "this.style.display='none';
+                                                    var save_btn = document.getElementById('save_btn_' + '{{ form[1]['form_name'] }}');
+                                                    var form_link = document.getElementById('form_link_' + '{{ form[1]['form_name'] }}');
 
-                        <button type="submit" class="btn btn-default" id="save_btn_{{ form[1]['form_name'] }}" style="display:none"
-                            onclick=
-                               "this.style.display='none';
-                                var edit_btn = document.getElementById('edit_btn_' + '{{ form[1]['form_name'] }}');
-                                var form_link = document.getElementById('form_link_' + '{{ form[1]['form_name'] }}');
-                                var new_form_link = document.getElementById('new_form_link_' + '{{ form[1]['form_name'] }}');
+                                                    save_btn.style.display='block';
+                                                    form_link.disabled=false;"
+                                            >
+                                                Edit
+                                            </button>
 
-                                edit_btn.style.display='block';
-                                form_link.disabled=true;
-                                new_form_link.value = form_link.value"
-                        >
-                            Save
-                        </button>
+                                            <button type="submit" class="btn btn-default" id="save_btn_{{ form[1]['form_name'] }}" style="display:none"
+                                                onclick=
+                                                   "this.style.display='none';
+                                                    var edit_btn = document.getElementById('edit_btn_' + '{{ form[1]['form_name'] }}');
+                                                    var form_link = document.getElementById('form_link_' + '{{ form[1]['form_name'] }}');
+                                                    var new_form_link = document.getElementById('new_form_link_' + '{{ form[1]['form_name'] }}');
+
+                                                    edit_btn.style.display='block';
+                                                    form_link.disabled=true;
+                                                    new_form_link.value = form_link.value"
+                                            >
+                                                Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
-                    {# <a href="#" id="form_link" data-type="text" data-pk={{ form[0] }} data-url="/update_form_link" data-title="Edit Form Link">{{ form[1]['form_link'] }}</a> #}
                 </li>
             </ul>
         {% endfor %}
