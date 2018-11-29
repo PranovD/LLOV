@@ -4,6 +4,7 @@ from flask import render_template
 from flask_app import APP
 from flask_app import errors
 
+
 @APP.errorhandler(404)
 def error_404(e):
     """
@@ -13,7 +14,7 @@ def error_404(e):
 
 
 @APP.errorhandler(500)
-def error_500():
+def error_500(e):
     """
     description
     """

@@ -1,10 +1,9 @@
 """ This module does blah blah blah """
 
+# import os
 import plaid
-import os
 import csv
-from flask import json
-from flask_app import errors, db
+# from flask_app import errors
 
 
 try:
@@ -16,10 +15,6 @@ client = plaid.Client(PLAID_API_KEYS['plaid_client_id'],
                             PLAID_API_KEYS["plaid_secret"],
                             PLAID_API_KEYS["plaid_public_key"],
                             PLAID_API_KEYS["plaid_env"])
-
-
-
-
 
 
 def get_access_token(public_token):
@@ -36,6 +31,6 @@ def get_access_token(public_token):
                          exchange_response['item_id'],
                          exchange_response['request_id']])
     return exchange_response
-    
+
 
 

@@ -1,18 +1,14 @@
-"""
-If adding a new route, make sure it belongs here and wouldn't make more sense
-    in a controller. If you're making a call to Plaid or FB, a new route
-    probably belongs in one of the controllers
-    (not applicable if just renaming routes) - MA
-"""
+""" Description """
 
-from flask import render_template, request, abort
+from flask import render_template, request
 from flask_app import APP
-from flask_app import plaid_ctrl, db, errors, error_handlers
+from flask_app import plaid_ctrl, db
 
 try:
     from keys import PLAID_API_KEYS
 except IOError:
     print("Keys File not Found. Online Access")
+
 
 @APP.route('/')
 @APP.route('/dashboard')
@@ -95,8 +91,6 @@ def get_access_token():
     return access_token
     """
 
-    # print("get_access_token route")
-
     plaid_access_token = plaid_ctrl.get_access_token(
         request.form['public_token'])
     # return render_template('dashboard.html', page="Dash",
@@ -121,24 +115,3 @@ def get_table_data():
     return render_template('table_data.html',
                            data=documents_data,
                            page=collection)
-
-
-@APP.route('/update', methods=['POST', 'GET'])
-def update():
-    """
-    description
-
-    Same as above method, needs more description. Whats being updated? - MA
-    """
-    collection = db.sanitize_user_input(request.args.get('table'))
-    return db.get_firebase_collection(collection)
-
-
-@APP.route('/on_app_load')
-def on_app_load():
-    """
-    description
-
-    See above ^  - MA
-    """
-    pass

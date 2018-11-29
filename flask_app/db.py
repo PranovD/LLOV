@@ -2,7 +2,7 @@
 
 import pyrebase
 import sys
-from flask_app import errors, mc_ctrl
+from flask_app import errors
 
 try:
     from keys import FIREBASE_KEYS
