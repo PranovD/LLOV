@@ -44,48 +44,30 @@
 
         <div class="my-3 p-3 bg-white rounded box-shadow">
             <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="data-table">
-                <table class="table table-hover table-responsive table-bordered" id="dataTable">
 
+                {% set attr_titles = [] %}
+                {% for doc_id, document in data.items() %}
+                    {% for attribute in document %}
+                        {% set attr_titles = attr_titles.extend([attribute]) %}
+                    {% endfor %}
+                {% endfor %}
+
+                <table class="table table-hover table-responsive table-bordered" id="dataTable">
                     <thead class="thead-light">
-                        <th scope="col"> {{ page }} ID </th>
-                        {% for doc_id, document in data.items() %}
-                            {% for attribute in document %}
-                                <th scope="col"> {{ attribute }} </th>
-                            {% endfor %}
+                        {% for attribute in attr_titles | unique %}
+                            <th scope="col"> {{ attribute }} </th>
                         {% endfor %}
                     </thead>
 
                     <tbody>
                         {% for doc_id, document in data.items() %}
                             <tr>
-                                <th scope="row"> {{ doc_id }}</th>
-
                                 {% for attribute in document %}
                                     <td> {{ document[attribute] }} </td>
                                 {% endfor %}
                             </tr>
                         {% endfor %}
                     </tbody>
-                        {# I wasn't sure if this Jinja was needed anymore? - MA
-                        <tr>
-                            {% for k in get_keys %}
-                                <th scope="col">{{ k }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for item in get_data %}
-                            <tr>
-                                {% for k in get_keys %}
-                                    <td class={{ item["key"] }} data-toggle="modal" onclick="updateDiv('{{ item["key"] }}', {{ get_keys }})" data-target="#modalCenter">
-                                        {{ item["val"][k] }}
-                                    </td>
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
-                        #}
-
                 </table>
             </div>
         </div>
@@ -103,55 +85,13 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <!-- what is this for? If it's logging in, this should be in a separate template and jinja'd - MA
-                        <div class="modal-body" id="modalData"></div>
-                        <div class="modal-footer">
-                            <div class="form-row">
-                                <div class="col">
-                                    <input type="password" class="form-control btn-block" name="password" id="inputPassword2" placeholder="Password">
-                                </div>
-                                <div class="col">
-                                    <button type="submit" name="action" value="submit" class="btn btn-primary btn-block">Save</button>
-                                </div>
-                                <div class="col">
-                                    <button type="submit" name="action" value="delete" class="btn btn-block btn-outline-danger">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                        -->
                     </form>
                 </div>
             </div>
         </div>
 
-        <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+
         <script>
-           // I wasn't sure if this js was still needed after jinja was added for table - MA
-           // function updateDiv(uniqueKey, get_keys) {
-           //     var data = []
-           //     $("." + uniqueKey).each(function() {
-           //         data.push($(this).text().trim());
-           //     });
-
-           //     if (get_keys != null) {
-           //         var innerHTML = "<table class='table'>"
-           //         for (i = 0; i < get_keys.length; i++) {
-           //             innerHTML += "\
-           //                 <tr>\
-           //                     <th scope='col'>" + get_keys[i] +  "</th>\
-           //                     <td>\
-           //                         <input class='form-control' type='text' name='" + get_keys[i] + "'value='"+ data[i] +"'>\
-           //                     </td>\
-           //                 </tr>"
-           //         }
-           //     }
-
-           //     innerHTML += "</tr></table>"
-           //     document.getElementById("modalData").innerHTML = innerHTML;
-           //     document.getElementById("disabledInput").value = 'ID: ' + uniqueKey;
-           // }
-
-
             function search() {
                 var filter = document.getElementById("searchBox").value.toUpperCase();
                 var tr = document.getElementById("dataTable").getElementsByTagName("tr");
