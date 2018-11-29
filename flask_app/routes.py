@@ -7,7 +7,7 @@ If adding a new route, make sure it belongs here and wouldn't make more sense
 
 from flask import render_template, request, abort
 from flask_app import APP
-from flask_app import plaid_ctrl, db, errors, forms_ctrl, error_handlers
+from flask_app import plaid_ctrl, db, errors, error_handlers
 
 try:
     from keys import PLAID_API_KEYS
@@ -27,7 +27,6 @@ def dashboard():
                            event_data=event_data,
                            donation_data=donation_data,
                            plaid_public_key=PLAID_API_KEYS["plaid_public_key"])
-
 
 
 @APP.route('/login')
@@ -63,178 +62,47 @@ def login():
     return render_template('login.html')
 
 
-@APP.route("/get_access_token", methods=['POST'])
-def get_access_token():
-    print("get_access_token route")
-
-
-    plaid_access_token = plaid_ctrl.get_access_token(request.form['public_token'])
-    # return render_template('dashboard.html', page="Dash",
-    #                        event_data=event_data,
-    #                        donation_data=donation_data)
-    return "Something"
-
-
 @APP.route('/forms', methods=['GET'])
 def get_forms():
     """
     description
     """
-    return render_template('forms.html')
+    white_listed_forms = db.get_firebase_collection("forms")
+    return render_template('forms.html',
+                           forms=white_listed_forms)
 
 
 @APP.route('/forms', methods=['POST'])
-def post_new_form():
+def edit_form_link():
     """
     description
     """
-    return render_template('create_new_form.html')
+    form_id = db.sanitize_user_input(request.form.get('form_id'))
+    form_name = db.sanitize_user_input(request.form.get('form_name'))
+    new_form_link = db.sanitize_user_input(request.form.get('new_form_link'))
+
+    updated_form_data = {'form_name': form_name, 'form_link': new_form_link}
+    db.update_firebase_document("forms", form_id, updated_form_data)
+
+    return get_forms()
 
 
-@APP.route('/forms/<form>', methods=['GET', 'POST'])
-def display_form(form):
+@APP.route("/get_access_token", methods=['POST'])
+def get_access_token():
     """
-    description
-    """
-    clean_form = db.sanitize_user_input(form)
-
-    form_object = forms_ctrl.create_form_object(clean_form)
-    html_form_type = forms_ctrl.get_html_form_type(clean_form)
-    # if form_object.validate_on_submit():
-
-    return render_template('form_base.html', page=clean_form,
-                           form=form_object,
-                           specific_form_html=html_form_type)
-
-
-# @APP.route('/forms/<form>', methods=['GET', 'POST'])
-# def display_form(form):
-#     """
-#     description
-#     """
-#     if form not in white_listed_forms:
-#         raise errors.InvalidUsage("We are currently not storing \
-#                                   this data.", status_code=410)
-#     else:
-#         if request.method == 'POST':
-#             new_data = {}
-#             # WTForms needed for this: - MA
-#             # for field in form:
-#             #     new_foster_dog_data[field.name] = field.data
-#
-#             db.add_firebase_document(form, new_data)
-#
-#     return render_template('<form>_form.html', page="<form>")
-
-
-@APP.route('/forms/volunteer', methods=['GET', 'POST'])
-def volunteer_form():
-    """
-    description
+    public_token = None
+    access_token = plaid_ctrl.get_access_token(public_token)
+    return access_token
     """
 
-    if request.method == 'POST':
-        new_volunteer_data = {}
-        # I want to convert listing the data manually like below
-        # to list data automatically like in this for loop: -MA
-        # Need to implement WTForms for this - MA
-        # for field in form:
-        #     new_volunteer_data[field.name] = field.data
+    # print("get_access_token route")
 
-        # data = {
-        #     'first_name': request.form.get('firstName'),
-        #     'last_name': request.form.get('lastName'),
-        #     'street': request.form.get('street'),
-        #     'city': request.form.get('city'),
-        #     'state': request.form.get('state'),
-        #     'zipcode': request.form.get('zipcode'),
-        #     'phone_number': request.form.get('number'),
-        #     'volunteering': {
-        #         'can_volunteer': request.form.get('volunteering'),
-        #         'longterm': request.form.get('long-term-foster'),
-        #         'shortterm': request.form.get('short-term-foster'),
-        #         'emergency': request.form.get('emergency-foster'),
-        #         'coord': request.form.get('coordinating'),
-        #         'flyers': request.form.get('putting-up-flyers'),
-        #         'dogwalking': request.form.get('dog-walking'),
-        #         'fundraising': request.form.get('fundraisers'),
-        #         'adoptions': request.form.get('helping-at-adoptions'),
-        #         'transporting': request.form.get('transporting'),
-        #         'vet': request.form.get('vet-appointments'),
-        #         'other': request.form.get('volunteering-other')
-        #     },
-        #     'adoption_fostering': {
-        #         'can_adopt': request.form.get('adopting'),
-        #         'can_foster': request.form.get('fostering'),
-        #         'dogTypes': {
-        #             'female': request.form.get('female'),
-        #             'male': request.form.get('male'),
-        #             'small': request.form.get('small'),
-        #             'large': request.form.get('large'),
-        #             'breeds': request.form.get('breeds'),
-        #             'other': request.form.get('fostering-other')
-        #         }
-        #     }
-        # }
-
-        db.add_firebase_document("volunteers", new_volunteer_data)
-    return render_template('volunteer_intake_form.html', page="Volunteers")
-
-
-@APP.route('/forms/foster', methods=['GET', 'POST'])
-def foster_form():
-    """
-    description
-    """
-
-    if request.method == 'POST':
-        new_foster_data = {}
-        # I want to convert listing the data manually like below
-        # to list data automatically like in this for loop: - MA
-        # Need to implement WTForms for this - MA
-        # for field in form:
-        #     new_foster_data[field.name] = field.data
-
-        # data = {
-        #     'first_name': request.form.get('first_name'),
-        #     'last_name': request.form.get('last_name'),
-        #     'street': request.form.get('street'),
-        #     'city': request.form.get('city'),
-        #     'state': request.form.get('state'),
-        #     'zipcode': request.form.get('zipcode'),
-        #     'can_adopt_more': request.form.get('can_adopt_more'),
-        #     'comments': request.form.get('comments'),
-        #     'timestamp': str(datetime.datetime.now())
-        # }
-
-        db.add_firebase_document("fosters", new_foster_data)
-    return render_template('foster_volunteer_intake_form.html', page="Fosters")
-
-
-@APP.route('/forms/donation', methods=['GET', 'POST'])
-def donation_form():
-    """
-    description
-    """
-
-    if request.method == 'POST':
-        new_donation_data = {}
-        # I want to convert listing the data manually like below
-        # to list data automatically like in this for loop: - MA
-        # Need to implement WTForms for this - MA
-        # for field in form:
-        #     new_donation_data[field.name] = field.data
-
-        # data = {
-        #     'first_name': request.form.get('firstName'),
-        #     'last_name': request.form.get('lastName'),
-        #     'amount': request.form.get('amount'),
-        #     'comments': request.form.get('comments'),
-        #     'source': request.form.get('source'),
-        #     'timestamp': str(datetime.datetime.now())
-        # }
-        db.add_firebase_document("donations", new_donation_data)
-    return render_template('new_donation_form.html', page="Donations")
+    plaid_access_token = plaid_ctrl.get_access_token(
+        request.form['public_token'])
+    # return render_template('dashboard.html', page="Dash",
+    #                        event_data=event_data,
+    #                        donation_data=donation_data)
+    return "Something"
 
 
 @APP.route('/data', methods=['POST', 'GET'])

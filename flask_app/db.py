@@ -1,6 +1,7 @@
 """ PLEASE DON'T CHANGE LINES 1-16 - MA """
 
 import pyrebase
+import sys
 from flask_app import errors, mc_ctrl
 
 try:
@@ -14,7 +15,7 @@ FIREBASE_USER = FIREBASE_AUTH.sign_in_with_email_and_password(
                                                              "tester@llov.com",
                                                              "tester")
 DB = FIREBASE.database()
-white_listed_collections = ["Dogs", "Person", "donations", "events"]
+white_listed_collections = ["Dogs", "Person", "donations", "events", "forms"]
 
 
 def get_firebase_collection(collection):
@@ -42,6 +43,27 @@ def add_firebase_document(collection, data):
                                   this data.", status_code=410)
     try:
         DB.child(clean_collection).push(clean_data)
+
+    except:
+        raise errors.InvalidUsage("We could not add your information \
+                                  at this time.", status_code=410)
+
+
+def update_firebase_document(collection, doc_id, data):
+    """
+    Description
+    """
+    # This doesn't work when passing in a form obj for some reason? See /forms post route
+    # clean_data = sanitize_data(data)
+
+    clean_collection = sanitize_user_input(collection)
+    clean_doc_id = sanitize_user_input(doc_id)
+
+    if clean_collection not in white_listed_collections:
+        raise errors.InvalidUsage("We are currently not storing \
+                                  this data.", status_code=410)
+    try:
+        DB.child(clean_collection).child(clean_doc_id).update(data)
 
     except:
         raise errors.InvalidUsage("We could not add your information \

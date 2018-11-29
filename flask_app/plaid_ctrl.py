@@ -1,9 +1,11 @@
 """ This module does blah blah blah """
 
 import plaid
+import os
 import csv
 from flask import json
 from flask_app import errors, db
+import pandas as pd
 
 try:
     from keys import PLAID_API_KEYS
@@ -15,25 +17,18 @@ client = plaid.Client(PLAID_API_KEYS['plaid_client_id'],
                             PLAID_API_KEYS["plaid_public_key"],
                             PLAID_API_KEYS["plaid_env"])
 
-# PLAID_ACCESS_TOKEN = PLAID_API_KEYS["plaid_access_token"]
+PLAID_ACCESS_TOKEN = None
+PLAID_ITEM_ID = None
 
-
-access_token = None
 public_token = None
+
 
 def get_plaid_data():
     """
     description
     """
-    try:
-        balance_response = \
-            None
-#           PLAID_CLIENT.Accounts.balance.get(PLAID_ACCESS_TOKEN)
-        balance = json.dumps(balance_response, indent=2, sort_keys=True)
-        return balance
-
-    except plaid.errors.PlaidError:
-        raise errors.InvalidUsage('This view is gone', status_code=410)
+    df = pd.read_csv('financial.csv')
+    print(df)
 
 
 def get_plaid_donations(request):
@@ -41,11 +36,22 @@ def get_plaid_donations(request):
     description
     """
 
+
 def get_access_token(public_token):
+    """
+    Handles public_token from Link SignIn to get an Access Token
+    Access Token is how we get any data about a specific Account from Plaid
+    """
     global access_token
     exchange_response = client.Item.public_token.exchange(public_token)
-    print(exchange_response)
-    with open('financial.csv', mode='a') as csv_file:
+    # print(exchange_response)
+    with open('financial.csv', 'a+') as csv_file:
         writer = csv.writer(csv_file, delimiter=',')
-        writer.writerow([exchange_response['access_token'], exchange_response['item_id'], exchange_response['request_id']])
+        writer.writerow([exchange_response['access_token'],
+                         exchange_response['item_id'],
+                         exchange_response['request_id']])
+    get_plaid_data()
     return exchange_response
+    
+
+
