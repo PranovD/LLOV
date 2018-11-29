@@ -4,21 +4,20 @@ from flask import render_template
 from flask_app import APP
 from flask_app import errors
 
-
 @APP.errorhandler(404)
-def not_found_error(e):
+def error_404(e):
     """
     description
     """
-    return render_template('404.html'), 404
+    return render_template('error_page.html', error=str(e)), 404
 
 
 @APP.errorhandler(500)
-def internal_error():
+def error_500():
     """
     description
     """
-    return render_template('500.html'), 500
+    return render_template('error_page.html', error=str(e)), 404
 
 
 @APP.errorhandler(errors.InvalidUsage)
