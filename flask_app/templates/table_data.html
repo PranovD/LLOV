@@ -61,7 +61,7 @@
                     <tbody>
                         {% for doc_id, document in data.items() %}
                             <tr>
-                                {% for attribute in document %}
+                                {% for attribute in attr_titles | unique %}
                                     
                                     {%if attribute == 'Amount'%}
                                         <td>{{ "$%.2f"|format(document[attribute]|float) }}</td>
