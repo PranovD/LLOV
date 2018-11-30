@@ -33,25 +33,9 @@ def login():
     Going to move the notes below into separate authorization controller - MA
     """
     """
-    Act management actions like changing pwd should be in separate route - MA
 
-    if request.form.get('password') == DATA_CHANGE_KEY:
-        id = request.form.get('id')[4:]
+    request.form.get('inputPassword')
 
-        if request.form.get('action') == 'delete':
-            DB.child(table).child(id).remove()
-
-        elif request.form.get('action') == 'submit':
-            get_data, get_keys = data_from(table)
-            data = {}
-            for key in request.form.keys():
-                if key in ('id', 'action', 'password'):
-                    continue
-                data[key] = request.form.get(key)
-
-            DB.child(table).child(id).set(data)
-
-        else:
             error = True
             error_data = "Password is incorrect"
     """
