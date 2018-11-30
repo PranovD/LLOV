@@ -70,6 +70,22 @@ def update_firebase_document(collection, doc_id, data):
                                   at this time.", status_code=410)
 
 
+def remove_firebase_document(collection, doc_id):
+    """
+    Description
+    """
+
+    clean_collection = sanitize_user_input(collection)
+    clean_doc_id = sanitize_user_input(doc_id)
+
+    try:
+        DB.child(clean_collection).child(clean_doc_id).remove()
+
+    except:
+        raise errors.InvalidUsage("We could not remove your information \
+                                  at this time.", status_code=410)
+
+
 def sanitize_user_input(user_input):
     """
     Sanitizes passed in string as a security measure.

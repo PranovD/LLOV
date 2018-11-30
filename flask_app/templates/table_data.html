@@ -75,7 +75,7 @@
                                     {%if attribute == 'Amount'%}
                                         <td class="{{ doc_id }}_data" >{{ "$%.2f"|format(document[attribute]|float) }}</td>
                                     {%else%}
-                                    <td class="{{ doc_id }}_data"> {{ document[attribute] }} </td>
+                                        <td class="{{ doc_id }}_data"> {{ document[attribute] }} </td>
                                     {% endif %}
 
                                 {% endfor %}

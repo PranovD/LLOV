@@ -101,10 +101,10 @@ def get_table_data():
         collection = "donations"
 
     if request.method == 'POST':
-        id = request.form.get('id')[4:]
+        doc_id = request.form.get('id')[4:]
 
         if request.form.get('action') == 'delete':
-            db.remove_firebase_document(collection, id)
+            db.remove_firebase_document(collection, doc_id)
 
         elif request.form.get('action') == 'submit':
             data = {}
@@ -113,7 +113,7 @@ def get_table_data():
                     continue
                 data[key] = request.form.get(key)
 
-            db.update_firebase_document(collection, id, data)
+            db.update_firebase_document(collection, doc_id, data)
 
     documents_data = db.get_firebase_collection(collection)
     return render_template('table_data.html',
