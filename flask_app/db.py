@@ -112,3 +112,58 @@ def sanitize_data(data):
             key = sanitize_user_input(key)
             value = sanitize_user_input(value)
     return data
+
+
+def get_donors_data():
+    """
+    donor_data = { donor_id: { total cont: num,
+                               past trans: {},
+                               donation cols pasted here
+                              }
+                  }
+    """
+
+    donor_data = {}
+    donation_data = get_firebase_collection("donations")
+    person_data = get_firebase_collection("Person")
+
+    for donation_id, donation in donation_data.items():
+        donor_id = donation['Donor ID']
+
+        if donor_id not in donor_data:
+            person = person_data.items()[donor_id]
+            person['Total Contributions'] = donation['Amount']
+            person['Past Transactions'] = {donation_id: donation}
+            donor_data[donor_id] = person
+
+        else:
+            total_contr = int(donor_data[donor_id]['Total Contributions'])
+            total_contr += int(donation['Amount'])
+            donor_data[donor_id]['Total Contributions'] = total_contr.toString()
+            donor_data[donor_id]['Past Transactions'][donation_id] = donation
+
+    return donor_data
+
+
+def get_formatted_donors_data():
+    """
+    Description
+    """
+    formatted_donors_data = []
+    donors_data = get_donors_data()
+    index = 0
+
+    while donors_data:
+        max_donor_id = max(donors_data,
+                           key=lambda x: donors_data[x]['Total Contributions'])
+        donor_name = donors_data[max_donor_id]['First Name'] + " " + donors_data[max_donor_id]['Last Name']
+        donor_tot = donors_data[max_donor_id]['Total Contributions']
+        donor_email = donors_data[max_donor_id]['Email']
+        donor_phone = donors_data[max_donor_id]['Phone Number']
+        formatted_donors_data[index] = [max_donor_id, donor_name, donor_tot,
+                                        donor_email, donor_phone]
+
+        donors_data.pop(max_donor_id, None)
+        index += 1
+
+    return formatted_donors_data
