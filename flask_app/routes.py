@@ -88,6 +88,20 @@ def get_access_token():
     return "Something"
 
 
+@APP.route('/donors', methods=['GET'])
+def view_donors():
+    """
+    Description
+    donor_data = [ [ id, name, amount, email, phone ] ]
+    """
+    # donors_data = db.get_formatted_donors_data()
+    donors_data = [["Alex Jones", "$200", "alex_jones@gmail.com", "348-343-1828"],
+                   ["Anna Smith", "$100", "anna_smith@gmail.com", "393-543-3405"],
+                   ["Allen White", "$40", "allen_white@gmail.com", "124-524-4840"]
+                   ]
+    return render_template('donors.html', donors_data=donors_data)
+
+
 @APP.route('/data', methods=['POST', 'GET'])
 def get_table_data():
     """

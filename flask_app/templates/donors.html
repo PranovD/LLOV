@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+    <div class="col-md-7 text-center mx-auto my-3 p-3 bg-white rounded box-shadow">
+        <br>
+        <h3> Top Donors </h3>
+        <br>
+        <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="data-table">
+
+            <table class="table text-center table-hover table-responsive" id="donors_table" style="margin-left: 7%">
+                <tbody>
+                    {% for donor in donors_data %}
+                        <tr>
+                            {% for datum in donor %}
+                                <td> {{ datum }}
+                            {% endfor %}
+                            <td><i class="fas fa-envelope"></i></td>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock content %}
