@@ -29,6 +29,7 @@ def dashboard():
                            donation_amount=donation_amount,
                            plaid_public_key=PLAID_API_KEYS["plaid_public_key"])
 
+
 @APP.route('/')
 @APP.route('/login')
 def login():
