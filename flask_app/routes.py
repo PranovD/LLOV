@@ -10,7 +10,6 @@ except IOError:
     print("Keys File not Found. Online Access")
 
 
-@APP.route('/')
 @APP.route('/dashboard')
 def dashboard():
     """
@@ -24,7 +23,7 @@ def dashboard():
                            donation_data=donation_data,
                            plaid_public_key=PLAID_API_KEYS["plaid_public_key"])
 
-
+@APP.route('/')
 @APP.route('/login')
 def login():
     """
