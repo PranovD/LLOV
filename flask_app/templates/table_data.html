@@ -62,7 +62,13 @@
                         {% for doc_id, document in data.items() %}
                             <tr>
                                 {% for attribute in document %}
+                                    
+                                    {%if attribute == 'Amount'%}
+                                        <td>{{ "$%.2f"|format(document[attribute]|float) }}</td>
+                                    {%else%}
                                     <td> {{ document[attribute] }} </td>
+                                    {% endif %}
+                                        
                                 {% endfor %}
                             </tr>
                         {% endfor %}
