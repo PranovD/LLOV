@@ -51,7 +51,7 @@
                     {% endfor %}
                 {% endfor %}
 
-                <table class="table table-hover table-responsive table-bordered" id="dataTable">
+                <table class="table table-hover table-responsive-lg table-bordered" id="dataTable">
                     <thead class="thead-light">
                         {% for attribute in attr_titles | unique %}
                             <th scope="col"> {{ attribute }} </th>
@@ -62,13 +62,13 @@
                         {% for doc_id, document in data.items() %}
                             <tr>
                                 {% for attribute in attr_titles | unique %}
-                                    
+
                                     {%if attribute == 'Amount'%}
                                         <td>{{ "$%.2f"|format(document[attribute]|float) }}</td>
                                     {%else%}
                                     <td> {{ document[attribute] }} </td>
                                     {% endif %}
-                                        
+
                                 {% endfor %}
                             </tr>
                         {% endfor %}
