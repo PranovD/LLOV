@@ -167,3 +167,52 @@ def get_formatted_donors_data():
         index += 1
 
     return formatted_donors_data
+
+def donation_graph_data():
+    table = "donations"
+    donnation_data, donnation_keys = dataFrom(table)
+    donation_amount = 0
+    donation_dates = []
+    donation_amounts = []
+    donation_types_graph = {'Cash': 0, 'Check': 0, 'Venmo': 0, 'Cashapp': 0, 'Bank Transaction': 0}
+    for donation in donnation_data:
+        donation_amount += float(donation['val']['Amount'])
+        date = donation['val']['Date Given']
+        if len(date) > 11:
+            date = date.split(' ')[0]
+        date = date.split('/')
+        if len(date[1]) == 1:
+            date[1] = "0" + date[1]
+        date = date[0] + '-' + date[1] + '-' + date[2]
+        donation_dates.insert(0, date)
+        donation_amounts.insert(0, float(donation['val']['Amount']))
+        donation_types_graph[donation['val']['Source']] += float(donation['val']['Amount'])
+    donation_dates, donation_amounts = zip(*sorted(zip(donation_dates, donation_amounts)))
+
+    donation_dates_set = set(donation_dates)
+    unique_dates = {}
+    for date in donation_dates_set:
+        if date not in unique_dates:
+            unique_dates[date] = []
+        unique_dates[date].append([index for index, value in enumerate(donation_dates) if value == date])
+
+    donation_amounts_set = []
+    donation_amounts = list(donation_amounts)
+    for date in donation_dates_set:
+        amount = 0
+        for index in unique_dates[date]:
+            for each in index:
+                amount += float(donation_amounts[each])
+        donation_amounts_set.append(amount)
+    donation_dates_set = list(donation_dates_set)
+
+    donation_dates_set, donation_amounts_set = zip(*sorted(zip(donation_dates_set, donation_amounts_set)))
+
+    return donation_types_graph.keys(),donation_types_graph.values(), donation_dates_set, donation_amounts_set, donation_amount
+
+
+def dataFrom(collection):
+    data = [{'key': item.key(), 'val': item.val()} for item in DB.child(collection).get().each()]
+    keys = [key.lower() for key in data[0]['val'].keys()]
+    return data, keys
+
