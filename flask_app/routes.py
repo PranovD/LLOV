@@ -10,7 +10,6 @@ except IOError:
     print("Keys File not Found. Online Access")
 
 
-@APP.route('/')
 @APP.route('/dashboard')
 def dashboard():
     """
@@ -30,7 +29,7 @@ def dashboard():
                            donation_amount=donation_amount,
                            plaid_public_key=PLAID_API_KEYS["plaid_public_key"])
 
-
+@APP.route('/')
 @APP.route('/login')
 def login():
     """
@@ -39,25 +38,9 @@ def login():
     Going to move the notes below into separate authorization controller - MA
     """
     """
-    Act management actions like changing pwd should be in separate route - MA
 
-    if request.form.get('password') == DATA_CHANGE_KEY:
-        id = request.form.get('id')[4:]
+    request.form.get('inputPassword')
 
-        if request.form.get('action') == 'delete':
-            DB.child(table).child(id).remove()
-
-        elif request.form.get('action') == 'submit':
-            get_data, get_keys = data_from(table)
-            data = {}
-            for key in request.form.keys():
-                if key in ('id', 'action', 'password'):
-                    continue
-                data[key] = request.form.get(key)
-
-            DB.child(table).child(id).set(data)
-
-        else:
             error = True
             error_data = "Password is incorrect"
     """
@@ -116,6 +99,21 @@ def get_table_data():
 
     if collection is None:
         collection = "donations"
+
+    if request.method == 'POST':
+        id = request.form.get('id')[4:]
+
+        if request.form.get('action') == 'delete':
+            db.remove_firebase_document(collection, id)
+
+        elif request.form.get('action') == 'submit':
+            data = {}
+            for key in request.form.keys():
+                if key == 'id' or key == 'action':
+                    continue
+                data[key] = request.form.get(key)
+
+            db.update_firebase_document(collection, id, data)
 
     documents_data = db.get_firebase_collection(collection)
     return render_template('table_data.html',

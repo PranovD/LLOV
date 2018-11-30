@@ -22,10 +22,10 @@ def error_500(e):
 
 
 @APP.errorhandler(errors.InvalidUsage)
-def handle_invalid_usage():
+def handle_invalid_usage(e):
     """
     description
     """
     # response = jsonify(error.to_dict())
     # response.status_code = error.status_code
-    return render_template('invalid_usage_error.html'), 410
+    return render_template('error_page.html', error=str(e)), 410
