@@ -94,6 +94,21 @@ def get_table_data():
     if collection is None:
         collection = "donations"
 
+    if request.method == 'POST':
+        id = request.form.get('id')[4:]
+
+        if request.form.get('action') == 'delete':
+            db.remove_firebase_document(collection, id)
+
+        elif request.form.get('action') == 'submit':
+            data = {}
+            for key in request.form.keys():
+                if key == 'id' or key == 'action':
+                    continue
+                data[key] = request.form.get(key)
+
+            db.update_firebase_document(collection, id, data)
+
     documents_data = db.get_firebase_collection(collection)
     return render_template('table_data.html',
                            data=documents_data,
