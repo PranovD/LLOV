@@ -1,5 +1,6 @@
 """ PLEASE DON'T CHANGE LINES 1-16 - MA """
-
+import datetime
+import time
 import pyrebase
 import sys
 from flask_app import errors
@@ -181,12 +182,19 @@ def donation_graph_data():
         if len(date) > 11:
             date = date.split(' ')[0]
         date = date.split('/')
-        if len(date[1]) == 1:
-            date[1] = "0" + date[1]
-        date = date[0] + '-' + date[1] + '-' + date[2]
-        donation_dates.insert(0, date)
-        donation_amounts.insert(0, float(donation['val']['Amount']))
-        donation_types_graph[donation['val']['Source']] += float(donation['val']['Amount'])
+
+        month, day, year = int(date[0]), int(date[1]), int(date[2])
+        dt = datetime.datetime(year=year, month=month, day=day)
+        new_date = time.mktime(dt.timetuple())
+        right_now_30_days_ago = datetime.datetime.today() - datetime.timedelta(days=30)
+        if dt >= right_now_30_days_ago:
+            if len(date[1]) == 1:
+                date[1] = "0" + date[1]
+            date = date[0] + '-' + date[1] + '-' + date[2]
+            donation_dates.insert(0, date)
+            donation_amounts.insert(0, float(donation['val']['Amount']))
+            donation_types_graph[donation['val']['Source']] += float(donation['val']['Amount'])
+
     donation_dates, donation_amounts = zip(*sorted(zip(donation_dates, donation_amounts)))
 
     donation_dates_set = set(donation_dates)
