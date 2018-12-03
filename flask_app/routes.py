@@ -111,9 +111,17 @@ def get_table_data():
 
     documents_data = {}
     collection = db.sanitize_user_input(request.args.get('table'))
+    link = ""
 
-    if collection is None:
+    if collection is None or collection == "donations":
         collection = "donations"
+        link = "https://docs.google.com/forms/d/e/1FAIpQLSf2szk_3I7zXygqCI7pVrivxLfhM9Wf1qAFAE-MyHK8svBuDw/viewform"
+
+    elif collection == "Person":
+        link = "https://goo.gl/forms/1CtUKUw1kxSvhVTh2"
+
+    elif collection == "Dogs":
+        link = "https://goo.gl/forms/2XCeDkJEYcPMZy2l2"
 
     if request.method == 'POST':
         doc_id = request.form.get('id')[4:]
@@ -133,5 +141,6 @@ def get_table_data():
     documents_data = db.get_firebase_collection(collection)
     return render_template('table_data.html',
                            data=documents_data,
-                           page=collection)
+                           page=collection,
+                           link=link)
 

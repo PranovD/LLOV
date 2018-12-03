@@ -27,21 +27,27 @@
         </nav>
     </div>
 
-    <main role="main" class="container">
-        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+    <main role="main" class="container-fluid">
+        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow col-lg-9 mx-auto">
             <img class="mr-3" src="{{ url_for('static',filename='imgs/folder.svg') }}" alt="" width="48" height="48">
             <div class="lh-100">
                 <h2 class="mb-0 text-white lh-100">{{ active_page.upper() }}</h2>
             </div>
         </div>
 
-        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow">
+        <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded box-shadow col-lg-9 mx-auto">
             <form class="form-inline my-2 my-lg-0">
               <input class="form-control mr-sm-2" type="text" placeholder="Search" onkeyup="search()" id="searchBox"aria-label="Search">
             </form>
         </div>
 
-        <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="my-3 p-3 bg-white rounded box-shadow mx-auto col-lg-10">
+            <div style="margin-bottom:4%" class="col-lg-12">
+                <form action="{{ link }}">
+                    <input class="btn-primary" type="submit" value="+" style="float:right" />
+                </form>
+            </div>
+
             <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="data-table">
 
                 {% set attr_titles = [] %}
